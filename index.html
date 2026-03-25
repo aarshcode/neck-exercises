@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cervicogenic Headache Exercises</title>
+<style>
+  :root {
+    --teal: #1a8a7d;
+    --teal-dark: #14706a;
+    --teal-light: #e0f5f3;
+    --orange: #e8820e;
+    --bg: #f4f7f9;
+    --card: #ffffff;
+    --text: #2c3e50;
+    --muted: #7f8c8d;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    background: var(--teal);
+    color: white;
+    text-align: center;
+    padding: 28px 20px 22px;
+  }
+  header h1 { font-size: 1.6rem; margin-bottom: 4px; }
+  header p { opacity: 0.85; font-size: 0.9rem; }
+  .disclaimer {
+    max-width: 700px;
+    margin: 16px auto;
+    padding: 12px 18px;
+    background: #fff3cd;
+    border-left: 4px solid var(--orange);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+  }
+
+  /* Navigation / progress */
+  .progress-bar {
+    max-width: 700px;
+    margin: 12px auto;
+    display: flex;
+    gap: 4px;
+    padding: 0 16px;
+  }
+  .progress-bar .seg {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    transition: background 0.3s;
+  }
+  .progress-bar .seg.done { background: var(--teal); }
+  .progress-bar .seg.active { background: var(--orange); }
+
+  /* Views */
+  .view { display: none; max-width: 700px; margin: 0 auto; padding: 16px; }
+  .view.active { display: block; }
+
+  /* Home view */
+  .exercise-list { list-style: none; }
+  .exercise-list li {
+    background: var(--card);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .exercise-list li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+  .exercise-list li .num {
+    background: var(--teal);
+    color: white;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .exercise-list li .num.completed { background: #27ae60; }
+  .exercise-list li .info { flex: 1; }
+  .exercise-list li .info h3 { font-size: 1rem; margin-bottom: 2px; }
+  .exercise-list li .info span { font-size: 0.8rem; color: var(--muted); }
+  .exercise-list li .arrow { color: var(--muted); font-size: 1.2rem; }
+
+  .btn-start-all {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    margin-top: 16px;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-start-all:hover { background: var(--teal-dark); }
+
+  /* Exercise view */
+  .exercise-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .exercise-card .badge {
+    display: inline-block;
+    background: var(--teal);
+    color: white;
+    padding: 3px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .exercise-card h2 { font-size: 1.4rem; margin-bottom: 4px; }
+  .exercise-card .purpose {
+    color: var(--teal);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+  .exercise-card .steps { margin-bottom: 20px; }
+  .exercise-card .steps h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .exercise-card .steps ol { padding-left: 22px; }
+  .exercise-card .steps li {
+    padding: 6px 0;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+    border-radius: 4px;
+  }
+  .exercise-card .steps li.highlight {
+    background: var(--teal-light);
+    padding-left: 6px;
+    font-weight: 600;
+  }
+  .meta-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .meta-box {
+    flex: 1;
+    background: var(--teal-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .meta-box .label { font-size: 0.7rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; }
+  .meta-box .value { font-size: 1rem; font-weight: 700; color: var(--teal); }
+
+  /* Timer display */
+  .timer-area {
+    text-align: center;
+    margin: 20px 0;
+  }
+  .timer-display {
+    font-size: 3.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+  .timer-display.warning { color: var(--orange); }
+  .timer-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+  .rep-counter {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .rep-counter span { color: var(--teal); }
+  .side-indicator {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .side-left { background: #dbeafe; color: #1e40af; }
+  .side-right { background: #fce7f3; color: #9d174d; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-primary:hover { background: var(--teal-dark); }
+  .btn-secondary { background: #ecf0f1; color: var(--text); }
+  .btn-secondary:hover { background: #dfe6e9; }
+  .btn-success { background: #27ae60; color: white; }
+  .btn-success:hover { background: #219a52; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-orange:hover { background: #cf7410; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  /* Tips section */
+  .tips {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 0 16px 30px;
+  }
+  .tips h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--teal);
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .tip-item {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .tip-item strong { color: var(--teal); }
+
+  /* Complete screen */
+  .complete-screen {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .complete-screen .check {
+    font-size: 4rem;
+    margin-bottom: 16px;
+  }
+  .complete-screen h2 { font-size: 1.5rem; margin-bottom: 8px; }
+  .complete-screen p { color: var(--muted); margin-bottom: 24px; }
+
+  /* Audio beep fallback */
+  @media (max-width: 500px) {
+    .meta-row { flex-direction: column; }
+    .tips-grid { grid-template-columns: 1fr; }
+    .timer-display { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cervicogenic Headache Exercises</h1>
+  <p>A Physiotherapy Guide</p>
+</header>
+
+<div class="disclaimer">
+  <strong>Important:</strong> Consult a physiotherapist before starting these exercises. They can assess your specific condition and ensure proper technique.
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- HOME VIEW -->
+<div class="view active" id="homeView">
+  <ul class="exercise-list" id="exerciseList"></ul>
+  <button class="btn-start-all" onclick="startAll()">Start Full Routine</button>
+  <div class="tips">
+    <h3>General Tips</h3>
+    <div class="tips-grid">
+      <div class="tip-item"><strong>Start slowly</strong> — Progress gradually, don't rush into full intensity.</div>
+      <div class="tip-item"><strong>Pain rule</strong> — Never push through sharp pain. Stop if pain increases.</div>
+      <div class="tip-item"><strong>Be consistent</strong> — Regularity matters more than intensity.</div>
+      <div class="tip-item"><strong>Good posture</strong> — Maintain good posture throughout the day.</div>
+      <div class="tip-item"><strong>Desk breaks</strong> — Stretch every 30-60 minutes at your desk.</div>
+      <div class="tip-item"><strong>Ice / Heat</strong> — Heat before exercise, ice after for inflammation.</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCISE VIEW -->
+<div class="view" id="exerciseView">
+  <div class="exercise-card" id="exerciseCard"></div>
+</div>
+
+<!-- COMPLETE VIEW -->
+<div class="view" id="completeView">
+  <div class="complete-screen">
+    <div class="check">&#10003;</div>
+    <h2>Routine Complete!</h2>
+    <p>Great work! Remember to stay consistent — daily practice builds results.</p>
+    <button class="btn btn-primary" onclick="goHome()">Back to Home</button>
+  </div>
+</div>
+
+<script>
+const exercises = [
+  {
+    id: 1, name: "Chin Tucks",
+    purpose: "Counteract forward head posture, which strains the neck and contributes to cervicogenic headache.",
+    steps: [
+      "Stand in a comfortable position.",
+      "Nod your head slightly to bring your chin toward your chest.",
+      "Glide or retract your chin back, relaxing your jaw muscles as you hold.",
+      "Relax your neck muscles to return to the starting position."
+    ],
+    reps: "10–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 12, hasSides: false
+  },
+  {
+    id: 2, name: "Craniocervical Flexion (CCF)",
+    purpose: "Activate deep neck flexor muscles to support the cervical spine.",
+    steps: [
+      "Lie on your back with a rolled towel under your neck.",
+      "Slowly nod your head as if saying \"yes\" in slow motion.",
+      "Keep movement small and controlled.",
+      "Return to the starting position with control."
+    ],
+    reps: "10–12 reps", freq: "2x daily", holdSec: 3, totalReps: 11, hasSides: false
+  },
+  {
+    id: 3, name: "Lateral Neck Flexion",
+    purpose: "Ease tension on the sides of the neck.",
+    steps: [
+      "Sit upright.",
+      "Slowly tilt your right ear toward your right shoulder — don't force it.",
+      "Hold for 15–20 seconds.",
+      "Lift back to centre and repeat on the left side."
+    ],
+    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true
+  },
+  {
+    id: 4, name: "Neck Rotation Stretch",
+    purpose: "Improve neck mobility and reduce stiffness.",
+    steps: [
+      "Sit upright.",
+      "Slowly turn your head to look over your right shoulder.",
+      "Hold gently at the end range.",
+      "Return to centre and repeat on the left side."
+    ],
+    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true
+  },
+  {
+    id: 5, name: "Shoulder Blade Squeeze",
+    purpose: "Strengthen upper back muscles to support the neck.",
+    steps: [
+      "Sit upright.",
+      "Squeeze your shoulder blades together as if pinching a pencil between them.",
+      "Hold, then release slowly."
+    ],
+    reps: "12–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 13, hasSides: false
+  },
+  {
+    id: 6, name: "Doorway Chest Stretch",
+    purpose: "Open chest and shoulder muscles to counteract slouched posture.",
+    steps: [
+      "Stand in a doorway with elbows bent, each forearm resting on one side of the door frame at chest height.",
+      "Step one foot through the doorway, moving hips and chest forward while forearms stay in place.",
+      "Focus on creating length through your chest and arms.",
+      "Move your hips and chest back to relax out of the stretch."
+    ],
+    reps: "2–3 reps", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: false
+  },
+  {
+    id: 7, name: "Seated Trap Stretch",
+    purpose: "Stretch the trapezius — directly linked to cervicogenic headache.",
+    steps: [
+      "Sit upright with your arms at your sides.",
+      "Hold the side of the chair with your right hand to anchor the shoulder down.",
+      "Tilt your head to the left, dropping your left ear as if listening to the front of your underarm.",
+      "Keep shoulders relaxed as you hold. Lift your head to return, then repeat on the other side."
+    ],
+    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true
+  },
+  {
+    id: 8, name: "Head Turns with Hand",
+    purpose: "Restore neck rotation range of motion for daily activities.",
+    steps: [
+      "Sit or stand in a comfortable position.",
+      "Rotate your head as if looking over your shoulder.",
+      "Gently add pressure to your chin or cheek to increase the stretch.",
+      "Return to centre, pause, then rotate the opposite direction.",
+      "Only go as far as feels comfortable — don't force the stretch."
+    ],
+    reps: "5–8 reps each side", freq: "Daily", holdSec: 12, totalReps: 6, hasSides: true
+  },
+  {
+    id: 9, name: "Seated Deep Levator Stretch",
+    purpose: "Reduce tension in the levator scapulae — one of the main muscles associated with cervicogenic headache.",
+    steps: [
+      "Sit tall with one hand lightly grasping the side of your chair.",
+      "Bring your gaze about halfway toward your opposite shoulder, then look down toward that armpit.",
+      "Place your opposite hand on your head to add gentle pressure to the stretch.",
+      "Return to centre and repeat on the other side."
+    ],
+    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true
+  },
+  {
+    id: 10, name: "Bent Over IYT",
+    purpose: "Strengthen upper back muscles to take pressure off the neck during prolonged sitting.",
+    steps: [
+      "Hinge at your hips to bend your chest toward the floor. Knees soft, back flat, arms hanging straight down.",
+      "Lift arms straight up close to your ears into the I position. Hold, then lower.",
+      "Lift arms up and out at an angle into the Y position. Hold, then lower.",
+      "Lift arms out to the sides into the T position, squeezing upper back muscles. Hold, then lower."
+    ],
+    reps: "8–10 reps per set", freq: "2x daily", holdSec: 3, totalReps: 9, hasSides: false
+  }
+];
+
+let state = {
+  mode: 'home', // home | exercise | complete
+  sequential: false,
+  currentIdx: 0,
+  currentRep: 0,
+  currentSide: 'right',
+  timerValue: 0,
+  timerRunning: false,
+  timerInterval: null,
+  completed: new Set(),
+  stepHighlight: -1,
+  resting: false,
+  restCountdown: 0,
+  paused: false,
+  pausedPhase: null // 'hold' or 'rest'
+};
+
+// Audio context for beeps
+let audioCtx = null;
+function beep(freq = 800, duration = 150, count = 1) {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.value = freq;
+      gain.gain.value = 0.3;
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + duration / 1000);
+    }, i * (duration + 80));
+  }
+}
+
+function renderProgressBar() {
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = '';
+  exercises.forEach((ex, i) => {
+    const seg = document.createElement('div');
+    seg.className = 'seg';
+    if (state.completed.has(i)) seg.classList.add('done');
+    if (state.mode === 'exercise' && i === state.currentIdx) seg.classList.add('active');
+    bar.appendChild(seg);
+  });
+}
+
+function renderHome() {
+  const list = document.getElementById('exerciseList');
+  list.innerHTML = '';
+  exercises.forEach((ex, i) => {
+    const li = document.createElement('li');
+    li.onclick = () => startExercise(i);
+    const done = state.completed.has(i);
+    li.innerHTML = `
+      <div class="num ${done ? 'completed' : ''}">${done ? '&#10003;' : ex.id}</div>
+      <div class="info">
+        <h3>${ex.name}</h3>
+        <span>${ex.reps} &middot; ${ex.freq} &middot; ${ex.holdSec}s hold</span>
+      </div>
+      <div class="arrow">&#8250;</div>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(name + 'View').classList.add('active');
+  state.mode = name;
+  renderProgressBar();
+}
+
+function goHome() {
+  clearTimer();
+  state.sequential = false;
+  showView('home');
+  renderHome();
+}
+
+function startAll() {
+  state.sequential = true;
+  state.completed.clear();
+  startExercise(0);
+}
+
+function startExercise(idx) {
+  clearTimer();
+  state.currentIdx = idx;
+  state.currentRep = 0;
+  state.currentSide = 'right';
+  state.timerValue = 0;
+  state.timerRunning = false;
+  state.stepHighlight = -1;
+  showView('exercise');
+  renderExercise();
+}
+
+function renderExercise() {
+  const ex = exercises[state.currentIdx];
+  const card = document.getElementById('exerciseCard');
+  const sideLabel = ex.hasSides
+    ? `<div class="side-indicator ${state.currentSide === 'right' ? 'side-right' : 'side-left'}">${state.currentSide === 'right' ? 'Right Side' : 'Left Side'}</div><br>`
+    : '';
+  const totalHalves = ex.hasSides ? ex.totalReps * 2 : ex.totalReps;
+  const currentCount = ex.hasSides
+    ? (state.currentSide === 'right' ? state.currentRep : ex.totalReps + state.currentRep)
+    : state.currentRep;
+
+  let stepsHtml = ex.steps.map((s, i) =>
+    `<li class="${i === state.stepHighlight ? 'highlight' : ''}">${s}</li>`
+  ).join('');
+
+  const timeStr = formatTime(state.timerValue);
+  const isWarning = state.timerRunning && state.timerValue <= 3 && state.timerValue > 0;
+
+  card.innerHTML = `
+    <div class="badge">Exercise ${ex.id} of 10</div>
+    <h2>${ex.name}</h2>
+    <p class="purpose">${ex.purpose}</p>
+    <div class="meta-row">
+      <div class="meta-box"><div class="label">Reps</div><div class="value">${ex.reps}</div></div>
+      <div class="meta-box"><div class="label">Frequency</div><div class="value">${ex.freq}</div></div>
+      <div class="meta-box"><div class="label">Hold</div><div class="value">${ex.holdSec}s</div></div>
+    </div>
+    <div class="steps">
+      <h4>How To Do It</h4>
+      <ol>${stepsHtml}</ol>
+    </div>
+    <div class="timer-area">
+      ${sideLabel}
+      <div class="rep-counter">Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>
+      <div class="timer-display ${isWarning || state.resting ? 'warning' : ''}" id="timerDisp">${state.resting ? formatTime(state.restCountdown) : timeStr}</div>
+      <div class="timer-label" id="timerLabel">${state.paused ? 'Paused' : (state.resting ? 'Next rep in...' : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!')))}</div>
+      <div class="btn-row">
+        ${!state.paused && !state.timerRunning && !state.resting && state.timerValue === 0 ? `<button class="btn btn-primary" onclick="startTimer()">Start Hold</button>` : ''}
+        ${(state.timerRunning || state.resting) && !state.paused ? `<button class="btn btn-secondary" onclick="pauseAll()">Pause</button>` : ''}
+        ${state.paused ? `<button class="btn btn-primary" onclick="resumeAll()">Play</button>` : ''}
+        ${state.resting && !state.paused ? `<button class="btn btn-success" onclick="skipRest()">Skip Rest</button>` : ''}
+        <button class="btn btn-secondary" onclick="resetRep()">Reset Rep</button>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goHome()">&#8592; Home</button>
+      ${state.currentIdx > 0 ? `<button class="btn btn-secondary" onclick="startExercise(${state.currentIdx - 1})">&#8592; Prev</button>` : ''}
+      <button class="btn btn-success" onclick="completeExercise()">Done &#10003;</button>
+      ${state.currentIdx < 9 ? `<button class="btn btn-orange" onclick="startExercise(${state.currentIdx + 1})">Next &#8594;</button>` : ''}
+    </div>
+  `;
+}
+
+function formatTime(sec) {
+  return sec.toString().padStart(2, '0');
+}
+
+function startTimer() {
+  const ex = exercises[state.currentIdx];
+  state.timerValue = ex.holdSec;
+  state.timerRunning = true;
+  state.stepHighlight = ex.hasSides ? 2 : Math.min(2, ex.steps.length - 1); // highlight hold step
+  beep(600, 100, 1);
+  renderExercise();
+  state.timerInterval = setInterval(() => {
+    state.timerValue--;
+    if (state.timerValue <= 3 && state.timerValue > 0) beep(400, 80, 1);
+    if (state.timerValue <= 0) {
+      clearTimer();
+      state.timerValue = 0;
+      beep(800, 150, 3);
+      advanceRep();
+      return;
+    }
+    // Update just the display for performance
+    const disp = document.getElementById('timerDisp');
+    const label = document.getElementById('timerLabel');
+    if (disp) {
+      disp.textContent = formatTime(state.timerValue);
+      disp.className = 'timer-display' + (state.timerValue <= 3 ? ' warning' : '');
+    }
+    if (label) label.textContent = 'Hold...';
+  }, 1000);
+}
+
+function pauseAll() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  state.paused = true;
+  state.pausedPhase = state.resting ? 'rest' : 'hold';
+  state.timerRunning = false;
+  renderExercise();
+}
+
+function resumeAll() {
+  state.paused = false;
+  if (state.pausedPhase === 'rest') {
+    state.resting = true;
+    renderExercise();
+    state.timerInterval = setInterval(() => {
+      state.restCountdown--;
+      const disp = document.getElementById('timerDisp');
+      const label = document.getElementById('timerLabel');
+      if (disp) {
+        disp.textContent = formatTime(state.restCountdown);
+        disp.className = 'timer-display warning';
+      }
+      if (label) label.textContent = 'Next rep in...';
+      if (state.restCountdown <= 0) {
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+        state.resting = false;
+        startTimer();
+      }
+    }, 1000);
+  } else {
+    state.timerRunning = true;
+    renderExercise();
+    state.timerInterval = setInterval(() => {
+      state.timerValue--;
+      if (state.timerValue <= 3 && state.timerValue > 0) beep(400, 80, 1);
+      if (state.timerValue <= 0) {
+        clearTimer();
+        state.timerValue = 0;
+        beep(800, 150, 3);
+        advanceRep();
+        return;
+      }
+      const disp = document.getElementById('timerDisp');
+      if (disp) {
+        disp.textContent = formatTime(state.timerValue);
+        disp.className = 'timer-display' + (state.timerValue <= 3 ? ' warning' : '');
+      }
+    }, 1000);
+  }
+  state.pausedPhase = null;
+}
+
+function clearTimer() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  state.timerRunning = false;
+  state.resting = false;
+  state.restCountdown = 0;
+  state.paused = false;
+  state.pausedPhase = null;
+}
+
+function skipRest() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  state.resting = false;
+  state.restCountdown = 0;
+  startTimer();
+}
+
+function advanceRep() {
+  const ex = exercises[state.currentIdx];
+  if (ex.hasSides && state.currentSide === 'right') {
+    state.currentSide = 'left';
+    state.stepHighlight = -1;
+    startRestCountdown();
+    return;
+  }
+  // Completed one full rep (both sides or no sides)
+  state.currentRep++;
+  state.currentSide = 'right';
+  state.stepHighlight = -1;
+  if (state.currentRep >= ex.totalReps) {
+    completeExercise();
+    return;
+  }
+  startRestCountdown();
+}
+
+function startRestCountdown() {
+  state.restCountdown = 3;
+  state.timerValue = 0;
+  state.timerRunning = false;
+  state.resting = true;
+  renderExercise();
+  state.timerInterval = setInterval(() => {
+    state.restCountdown--;
+    const disp = document.getElementById('timerDisp');
+    const label = document.getElementById('timerLabel');
+    if (disp) {
+      disp.textContent = formatTime(state.restCountdown);
+      disp.className = 'timer-display warning';
+    }
+    if (label) label.textContent = 'Next rep in...';
+    if (state.restCountdown <= 0) {
+      clearInterval(state.timerInterval);
+      state.timerInterval = null;
+      state.resting = false;
+      startTimer();
+    }
+  }, 1000);
+}
+
+function resetRep() {
+  clearTimer();
+  const ex = exercises[state.currentIdx];
+  // If we just advanced to the next rep (timer not running, value is 0),
+  // go back to the previous rep so the user can redo it
+  if (!state.timerRunning && state.timerValue === 0 && (state.currentRep > 0 || state.currentSide === 'left')) {
+    if (ex.hasSides && state.currentSide === 'left') {
+      state.currentSide = 'right';
+    } else if (state.currentRep > 0) {
+      state.currentRep--;
+      state.currentSide = ex.hasSides ? 'right' : 'right';
+    }
+  }
+  state.timerValue = 0;
+  state.timerRunning = false;
+  state.stepHighlight = -1;
+  renderExercise();
+}
+
+function completeExercise() {
+  clearTimer();
+  state.completed.add(state.currentIdx);
+  if (state.sequential && state.currentIdx < 9) {
+    startExercise(state.currentIdx + 1);
+  } else if (state.sequential && state.currentIdx === 9) {
+    showView('complete');
+  } else {
+    goHome();
+  }
+}
+
+// Initial render
+renderHome();
+renderProgressBar();
+</script>
+</body>
+</html>
