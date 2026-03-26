@@ -539,7 +539,8 @@ let state = {
   paused: false,
   pausedPhase: null, // 'hold' or 'rest'
   getReady: false,
-  getReadyCount: 0
+  getReadyCount: 0,
+  waiting: true
 };
 
 // Audio context for beeps
@@ -625,9 +626,15 @@ function startExercise(idx) {
   state.timerValue = 0;
   state.timerRunning = false;
   state.stepHighlight = -1;
+  state.waiting = true;
+  showView('exercise');
+  renderExercise();
+}
+
+function beginExercise() {
+  state.waiting = false;
   state.getReady = true;
   state.getReadyCount = 5;
-  showView('exercise');
   renderExercise();
   state.timerInterval = setInterval(() => {
     state.getReadyCount--;
@@ -683,16 +690,17 @@ function renderExercise() {
     </div>
     <div class="timer-area">
       ${sideLabel}
-      <div class="rep-counter">Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>
-      <div class="timer-display ${state.getReady || isWarning || state.resting ? 'warning' : ''}" id="timerDisp">${state.getReady ? formatTime(state.getReadyCount) : (state.resting ? formatTime(state.restCountdown) : timeStr)}</div>
-      <div class="timer-label" id="timerLabel">${state.getReady ? 'Get ready...' : (state.paused ? 'Paused' : (state.resting ? 'Next rep in...' : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!'))))}</div>
+      ${state.waiting ? '' : `<div class="rep-counter">Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>`}
+      ${state.waiting ? '' : `<div class="timer-display ${state.getReady || isWarning || state.resting ? 'warning' : ''}" id="timerDisp">${state.getReady ? formatTime(state.getReadyCount) : (state.resting ? formatTime(state.restCountdown) : timeStr)}</div>`}
+      ${state.waiting ? '' : `<div class="timer-label" id="timerLabel">${state.getReady ? 'Get ready...' : (state.paused ? 'Paused' : (state.resting ? 'Next rep in...' : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!'))))}</div>`}
       <div class="btn-row">
-        ${state.getReady ? `<button class="btn btn-success" onclick="skipGetReady()">Skip</button>` : ''}
-        ${!state.getReady && !state.paused && !state.timerRunning && !state.resting && state.timerValue === 0 ? `<button class="btn btn-primary" onclick="startTimer()">Start Hold</button>` : ''}
-        ${!state.getReady && (state.timerRunning || state.resting) && !state.paused ? `<button class="btn btn-secondary" onclick="pauseAll()">Pause</button>` : ''}
-        ${!state.getReady && state.paused ? `<button class="btn btn-primary" onclick="resumeAll()">Play</button>` : ''}
-        ${!state.getReady && state.resting && !state.paused ? `<button class="btn btn-success" onclick="skipRest()">Skip Rest</button>` : ''}
-        ${!state.getReady ? `<button class="btn btn-secondary" onclick="resetRep()">Reset Rep</button>` : ''}
+        ${state.waiting ? `<button class="btn btn-primary" onclick="beginExercise()" style="font-size:1.1rem;padding:14px 36px">&#9654; Start</button>` : ''}
+        ${!state.waiting && state.getReady ? `<button class="btn btn-success" onclick="skipGetReady()">Skip</button>` : ''}
+        ${!state.waiting && !state.getReady && !state.paused && !state.timerRunning && !state.resting && state.timerValue === 0 ? `<button class="btn btn-primary" onclick="startTimer()">Start Hold</button>` : ''}
+        ${!state.waiting && !state.getReady && (state.timerRunning || state.resting) && !state.paused ? `<button class="btn btn-secondary" onclick="pauseAll()">Pause</button>` : ''}
+        ${!state.waiting && !state.getReady && state.paused ? `<button class="btn btn-primary" onclick="resumeAll()">Play</button>` : ''}
+        ${!state.waiting && !state.getReady && state.resting && !state.paused ? `<button class="btn btn-success" onclick="skipRest()">Skip Rest</button>` : ''}
+        ${!state.waiting && !state.getReady ? `<button class="btn btn-secondary" onclick="resetRep()">Reset Rep</button>` : ''}
       </div>
     </div>
     <div class="nav-row">
@@ -799,6 +807,7 @@ function clearTimer() {
   state.pausedPhase = null;
   state.getReady = false;
   state.getReadyCount = 0;
+  state.waiting = false;
 }
 
 function skipGetReady() {
