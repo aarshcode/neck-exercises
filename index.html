@@ -57,6 +57,7 @@
     transition: background 0.3s;
   }
   .progress-bar .seg.done { background: var(--teal); }
+  .progress-bar .seg.partial { background: #a0d8d0; }
   .progress-bar .seg.active { background: var(--orange); }
 
   /* Views */
@@ -94,6 +95,9 @@
   .exercise-list li .info { flex: 1; }
   .exercise-list li .info h3 { font-size: 1rem; margin-bottom: 2px; }
   .exercise-list li .info span { font-size: 0.8rem; color: var(--muted); }
+  .daily-progress { font-weight: 600; }
+  .daily-progress.done { color: #27ae60; }
+  .daily-progress.partial { color: var(--orange); }
   .exercise-list li .arrow { color: var(--muted); font-size: 1.2rem; }
 
   .btn-start-all {
@@ -331,7 +335,7 @@ const exercises = [
       "Glide or retract your chin back, relaxing your jaw muscles as you hold.",
       "Relax your neck muscles to return to the starting position."
     ],
-    reps: "10–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 12, hasSides: false
+    reps: "10–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 12, hasSides: false, timesPerDay: 3
   },
   {
     id: 2, name: "Craniocervical Flexion (CCF)",
@@ -342,7 +346,7 @@ const exercises = [
       "Keep movement small and controlled.",
       "Return to the starting position with control."
     ],
-    reps: "10–12 reps", freq: "2x daily", holdSec: 3, totalReps: 11, hasSides: false
+    reps: "10–12 reps", freq: "2x daily", holdSec: 3, totalReps: 11, hasSides: false, timesPerDay: 2
   },
   {
     id: 3, name: "Lateral Neck Flexion",
@@ -353,7 +357,7 @@ const exercises = [
       "Hold for 15–20 seconds.",
       "Lift back to centre and repeat on the left side."
     ],
-    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true
+    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true, timesPerDay: 1
   },
   {
     id: 4, name: "Neck Rotation Stretch",
@@ -364,7 +368,7 @@ const exercises = [
       "Hold gently at the end range.",
       "Return to centre and repeat on the left side."
     ],
-    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true
+    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true, timesPerDay: 1
   },
   {
     id: 5, name: "Shoulder Blade Squeeze",
@@ -374,7 +378,7 @@ const exercises = [
       "Squeeze your shoulder blades together as if pinching a pencil between them.",
       "Hold, then release slowly."
     ],
-    reps: "12–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 13, hasSides: false
+    reps: "12–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 13, hasSides: false, timesPerDay: 3
   },
   {
     id: 6, name: "Doorway Chest Stretch",
@@ -385,7 +389,7 @@ const exercises = [
       "Focus on creating length through your chest and arms.",
       "Move your hips and chest back to relax out of the stretch."
     ],
-    reps: "2–3 reps", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: false
+    reps: "2–3 reps", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: false, timesPerDay: 1
   },
   {
     id: 7, name: "Seated Trap Stretch",
@@ -396,7 +400,7 @@ const exercises = [
       "Tilt your head to the left, dropping your left ear as if listening to the front of your underarm.",
       "Keep shoulders relaxed as you hold. Lift your head to return, then repeat on the other side."
     ],
-    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true
+    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true, timesPerDay: 1
   },
   {
     id: 8, name: "Head Turns with Hand",
@@ -408,7 +412,7 @@ const exercises = [
       "Return to centre, pause, then rotate the opposite direction.",
       "Only go as far as feels comfortable — don't force the stretch."
     ],
-    reps: "5–8 reps each side", freq: "Daily", holdSec: 12, totalReps: 6, hasSides: true
+    reps: "5–8 reps each side", freq: "Daily", holdSec: 12, totalReps: 6, hasSides: true, timesPerDay: 1
   },
   {
     id: 9, name: "Seated Deep Levator Stretch",
@@ -419,7 +423,7 @@ const exercises = [
       "Place your opposite hand on your head to add gentle pressure to the stretch.",
       "Return to centre and repeat on the other side."
     ],
-    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true
+    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true, timesPerDay: 1
   },
   {
     id: 10, name: "Bent Over IYT",
@@ -430,9 +434,43 @@ const exercises = [
       "Lift arms up and out at an angle into the Y position. Hold, then lower.",
       "Lift arms out to the sides into the T position, squeezing upper back muscles. Hold, then lower."
     ],
-    reps: "8–10 reps per set", freq: "2x daily", holdSec: 3, totalReps: 9, hasSides: false
+    reps: "8–10 reps per set", freq: "2x daily", holdSec: 3, totalReps: 9, hasSides: false, timesPerDay: 2
   }
 ];
+
+// --- localStorage daily tracking ---
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+}
+
+function getDailyData() {
+  const raw = localStorage.getItem('neck-exercises-daily');
+  if (!raw) return { date: getTodayKey(), counts: {} };
+  const data = JSON.parse(raw);
+  if (data.date !== getTodayKey()) {
+    // New day — reset
+    return { date: getTodayKey(), counts: {} };
+  }
+  return data;
+}
+
+function saveDailyData(data) {
+  localStorage.setItem('neck-exercises-daily', JSON.stringify(data));
+}
+
+function getTimesCompleted(idx) {
+  return getDailyData().counts[idx] || 0;
+}
+
+function recordCompletion(idx) {
+  const data = getDailyData();
+  data.counts[idx] = (data.counts[idx] || 0) + 1;
+  saveDailyData(data);
+}
+
+function isFullyDoneToday(idx) {
+  return getTimesCompleted(idx) >= exercises[idx].timesPerDay;
+}
 
 let state = {
   mode: 'home', // home | exercise | complete
@@ -475,7 +513,8 @@ function renderProgressBar() {
   exercises.forEach((ex, i) => {
     const seg = document.createElement('div');
     seg.className = 'seg';
-    if (state.completed.has(i)) seg.classList.add('done');
+    if (isFullyDoneToday(i)) seg.classList.add('done');
+    else if (getTimesCompleted(i) > 0) seg.classList.add('partial');
     if (state.mode === 'exercise' && i === state.currentIdx) seg.classList.add('active');
     bar.appendChild(seg);
   });
@@ -487,12 +526,17 @@ function renderHome() {
   exercises.forEach((ex, i) => {
     const li = document.createElement('li');
     li.onclick = () => startExercise(i);
-    const done = state.completed.has(i);
+    const doneCount = getTimesCompleted(i);
+    const fullyDone = doneCount >= ex.timesPerDay;
+    const progressText = ex.timesPerDay > 1
+      ? `${doneCount}/${ex.timesPerDay} today`
+      : (fullyDone ? 'Done today' : '');
     li.innerHTML = `
-      <div class="num ${done ? 'completed' : ''}">${done ? '&#10003;' : ex.id}</div>
+      <div class="num ${fullyDone ? 'completed' : ''}">${fullyDone ? '&#10003;' : ex.id}</div>
       <div class="info">
         <h3>${ex.name}</h3>
         <span>${ex.reps} &middot; ${ex.freq} &middot; ${ex.holdSec}s hold</span>
+        ${progressText ? `<br><span class="daily-progress ${fullyDone ? 'done' : 'partial'}">${progressText}</span>` : ''}
       </div>
       <div class="arrow">&#8250;</div>
     `;
@@ -752,6 +796,7 @@ function resetRep() {
 
 function completeExercise() {
   clearTimer();
+  recordCompletion(state.currentIdx);
   state.completed.add(state.currentIdx);
   if (state.sequential && state.currentIdx < 9) {
     startExercise(state.currentIdx + 1);
