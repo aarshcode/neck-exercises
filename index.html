@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Cervicogenic Headache Exercises</title>
 <style>
   :root {
@@ -22,12 +24,15 @@
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
   header {
     background: var(--teal);
     color: white;
     text-align: center;
     padding: 28px 20px 22px;
+    padding-top: calc(28px + env(safe-area-inset-top, 0px));
   }
   header h1 { font-size: 1.6rem; margin-bottom: 4px; }
   header p { opacity: 0.85; font-size: 0.9rem; }
@@ -218,6 +223,9 @@
     transition: opacity 0.2s, transform 0.1s;
   }
   .btn:active { transform: scale(0.97); }
+  .btn { touch-action: manipulation; }
+  .exercise-list li { touch-action: manipulation; }
+  .btn-start-all { touch-action: manipulation; }
   .btn-primary { background: var(--teal); color: white; }
   .btn-primary:hover { background: var(--teal-dark); }
   .btn-secondary { background: #ecf0f1; color: var(--text); }
@@ -271,11 +279,54 @@
   .complete-screen h2 { font-size: 1.5rem; margin-bottom: 8px; }
   .complete-screen p { color: var(--muted); margin-bottom: 24px; }
 
-  /* Audio beep fallback */
-  @media (max-width: 500px) {
-    .meta-row { flex-direction: column; }
-    .tips-grid { grid-template-columns: 1fr; }
-    .timer-display { font-size: 2.8rem; }
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    header { padding: 20px 16px 16px; }
+    header h1 { font-size: 1.3rem; }
+    .disclaimer { margin: 12px 10px; padding: 10px 14px; font-size: 0.8rem; }
+    .progress-bar { padding: 0 10px; margin: 10px auto; }
+    .view { padding: 10px; }
+
+    .exercise-list li { padding: 12px 14px; gap: 10px; }
+    .exercise-list li .num { width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px; }
+    .exercise-list li .info h3 { font-size: 0.9rem; }
+
+    .exercise-card { padding: 16px; }
+    .exercise-card h2 { font-size: 1.2rem; }
+    .exercise-card .purpose { font-size: 0.82rem; }
+    .exercise-card .steps ol { padding-left: 18px; }
+    .exercise-card .steps li { font-size: 0.88rem; padding: 4px 0; }
+
+    .meta-row { flex-direction: row; gap: 6px; }
+    .meta-box { padding: 8px 6px; }
+    .meta-box .label { font-size: 0.6rem; }
+    .meta-box .value { font-size: 0.85rem; }
+
+    .timer-display { font-size: 3rem; }
+    .rep-counter { font-size: 0.95rem; }
+
+    .btn { min-width: 0; padding: 12px 10px; font-size: 0.88rem; }
+    .btn-row { gap: 6px; }
+    .nav-row { gap: 6px; flex-wrap: wrap; }
+    .nav-row .btn { flex: 1 1 auto; min-width: 0; padding: 12px 8px; font-size: 0.82rem; }
+
+    .btn-start-all { padding: 14px; font-size: 1rem; }
+
+    .tips { padding: 0 10px 24px; }
+    .tips-grid { grid-template-columns: 1fr; gap: 6px; }
+    .tip-item { padding: 8px 12px; font-size: 0.8rem; }
+
+    .complete-screen { padding: 40px 16px; }
+    .complete-screen .check { font-size: 3rem; }
+    .complete-screen h2 { font-size: 1.3rem; }
+  }
+
+  @media (max-width: 360px) {
+    header h1 { font-size: 1.1rem; }
+    .timer-display { font-size: 2.5rem; }
+    .exercise-card h2 { font-size: 1.05rem; }
+    .nav-row .btn { font-size: 0.75rem; padding: 10px 6px; }
+    .btn { font-size: 0.82rem; padding: 10px 8px; }
   }
 </style>
 </head>
@@ -486,7 +537,9 @@ let state = {
   resting: false,
   restCountdown: 0,
   paused: false,
-  pausedPhase: null // 'hold' or 'rest'
+  pausedPhase: null, // 'hold' or 'rest'
+  getReady: false,
+  getReadyCount: 0
 };
 
 // Audio context for beeps
@@ -572,8 +625,29 @@ function startExercise(idx) {
   state.timerValue = 0;
   state.timerRunning = false;
   state.stepHighlight = -1;
+  state.getReady = true;
+  state.getReadyCount = 5;
   showView('exercise');
   renderExercise();
+  state.timerInterval = setInterval(() => {
+    state.getReadyCount--;
+    if (state.getReadyCount <= 3 && state.getReadyCount > 0) beep(400, 80, 1);
+    const disp = document.getElementById('timerDisp');
+    const label = document.getElementById('timerLabel');
+    if (disp) {
+      disp.textContent = formatTime(state.getReadyCount);
+      disp.className = 'timer-display warning';
+    }
+    if (label) label.textContent = 'Get ready...';
+    if (state.getReadyCount <= 0) {
+      clearInterval(state.timerInterval);
+      state.timerInterval = null;
+      state.getReady = false;
+      state.getReadyCount = 0;
+      beep(800, 150, 2);
+      startTimer();
+    }
+  }, 1000);
 }
 
 function renderExercise() {
@@ -610,14 +684,15 @@ function renderExercise() {
     <div class="timer-area">
       ${sideLabel}
       <div class="rep-counter">Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>
-      <div class="timer-display ${isWarning || state.resting ? 'warning' : ''}" id="timerDisp">${state.resting ? formatTime(state.restCountdown) : timeStr}</div>
-      <div class="timer-label" id="timerLabel">${state.paused ? 'Paused' : (state.resting ? 'Next rep in...' : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!')))}</div>
+      <div class="timer-display ${state.getReady || isWarning || state.resting ? 'warning' : ''}" id="timerDisp">${state.getReady ? formatTime(state.getReadyCount) : (state.resting ? formatTime(state.restCountdown) : timeStr)}</div>
+      <div class="timer-label" id="timerLabel">${state.getReady ? 'Get ready...' : (state.paused ? 'Paused' : (state.resting ? 'Next rep in...' : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!'))))}</div>
       <div class="btn-row">
-        ${!state.paused && !state.timerRunning && !state.resting && state.timerValue === 0 ? `<button class="btn btn-primary" onclick="startTimer()">Start Hold</button>` : ''}
-        ${(state.timerRunning || state.resting) && !state.paused ? `<button class="btn btn-secondary" onclick="pauseAll()">Pause</button>` : ''}
-        ${state.paused ? `<button class="btn btn-primary" onclick="resumeAll()">Play</button>` : ''}
-        ${state.resting && !state.paused ? `<button class="btn btn-success" onclick="skipRest()">Skip Rest</button>` : ''}
-        <button class="btn btn-secondary" onclick="resetRep()">Reset Rep</button>
+        ${state.getReady ? `<button class="btn btn-success" onclick="skipGetReady()">Skip</button>` : ''}
+        ${!state.getReady && !state.paused && !state.timerRunning && !state.resting && state.timerValue === 0 ? `<button class="btn btn-primary" onclick="startTimer()">Start Hold</button>` : ''}
+        ${!state.getReady && (state.timerRunning || state.resting) && !state.paused ? `<button class="btn btn-secondary" onclick="pauseAll()">Pause</button>` : ''}
+        ${!state.getReady && state.paused ? `<button class="btn btn-primary" onclick="resumeAll()">Play</button>` : ''}
+        ${!state.getReady && state.resting && !state.paused ? `<button class="btn btn-success" onclick="skipRest()">Skip Rest</button>` : ''}
+        ${!state.getReady ? `<button class="btn btn-secondary" onclick="resetRep()">Reset Rep</button>` : ''}
       </div>
     </div>
     <div class="nav-row">
@@ -722,6 +797,17 @@ function clearTimer() {
   state.restCountdown = 0;
   state.paused = false;
   state.pausedPhase = null;
+  state.getReady = false;
+  state.getReadyCount = 0;
+}
+
+function skipGetReady() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  state.getReady = false;
+  state.getReadyCount = 0;
+  beep(800, 150, 2);
+  startTimer();
 }
 
 function skipRest() {
