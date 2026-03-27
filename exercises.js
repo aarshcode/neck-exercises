@@ -22,12 +22,12 @@ const EXERCISE_DATA = {
       "type": "Strengthening / Mobility",
       "purpose": "Strengthen deep cervical flexors (longus colli, longus capitis) and suboccipitals to counteract forward head posture.",
       "steps": [
-        "Sit, stand, or lie on your back with a rolled towel under the neck (supine is easiest for beginners).",
-        "Keeping your jaw relaxed, glide your chin straight back in the horizontal plane — like making a double chin.",
-        "Hold for 3-5 seconds. Do NOT flex chin to chest — translate head straight back.",
+        "Sit or stand upright with good posture.",
+        "Keeping your eyes level, glide your head straight back — like sliding a drawer into a cabinet.",
+        "Hold for 3-5 seconds. You should feel a stretch at the base of your skull. Do NOT tilt your chin down.",
         "Relax and return to starting position."
       ],
-      "notes": "Can be done seated, standing, or supine. Supine is easiest for beginners. Do NOT flex chin to chest — translate head straight back in the horizontal plane.",
+      "notes": "Focus on the horizontal sliding movement. This can be done anywhere (desk, car, standing) to reset your posture.",
       "bestTime": "Morning, midday desk break, evening. Spread evenly throughout the day.",
       "reps": "10 reps",
       "freq": "2-3x daily",
@@ -44,12 +44,12 @@ const EXERCISE_DATA = {
       "purpose": "Activate deep neck flexor muscles (longus capitis, longus colli) to support the cervical spine.",
       "steps": [
         "Lie on your back with a rolled towel under your neck.",
-        "Slowly nod your head as if saying \"yes\" in slow motion — a gentle upper cervical nod.",
-        "Keep the movement small and controlled. Do not lift your head off the surface.",
-        "Hold for 10 seconds, then return to starting position with control.",
-        "Focus on engaging deep muscles without activating superficial neck muscles (SCM)."
+        "Place your tongue on the roof of your mouth to relax your jaw.",
+        "Slowly perform a tiny 'nod' (like saying 'yes') by pivoting your head on the top of your spine.",
+        "The back of your head should NOT push down into the towel; it should just rotate.",
+        "Hold this micro-nod for 10 seconds, focusing on the front of your throat."
       ],
-      "notes": "Ideally done with pressure biofeedback unit (Stabilizer) starting at 20 mmHg, progressing in 2 mmHg increments to 30 mmHg. Without biofeedback, focus on gentle upper neck nod without engaging superficial neck muscles (SCM). Progress slowly over weeks.",
+      "notes": "This is a specialized lying-down exercise. Focus on the tiny nodding motion (pivoting) rather than pushing the head down.",
       "bestTime": "Morning or evening in a quiet setting (requires focus and concentration). Supine position needed.",
       "reps": "10 reps",
       "freq": "1-2x daily",
@@ -61,16 +61,16 @@ const EXERCISE_DATA = {
     },
     {
       "id": 3,
-      "name": "Lateral Neck Flexion Stretch",
+      "name": "Lateral Neck Flexion (Side Neck Stretch)",
       "type": "Stretch",
       "purpose": "Stretch the upper trapezius, scalenes, and lateral cervical muscles to ease tension on the sides of the neck.",
       "steps": [
-        "Sit upright. Grip the seat of the chair with one hand to anchor the shoulder down.",
-        "Slowly tilt your ear toward the opposite shoulder — do not rotate your head, keep eyes forward.",
-        "Hold for 30 seconds.",
-        "Lift back to centre and repeat on the other side."
+        "Sit upright with your shoulders relaxed and level.",
+        "Slowly tilt your ear toward your shoulder while keeping your eyes looking straight ahead.",
+        "Do NOT lift your shoulder up to meet your ear; keep it dropped.",
+        "Hold for 30 seconds, then repeat on the opposite side."
       ],
-      "notes": "Grip the seat of a chair with the opposite hand to anchor the shoulder down for a deeper stretch. Do NOT rotate head — keep eyes forward.",
+      "notes": "This is a general mobility stretch for the scalenes. Keep your face pointing forward throughout the movement.",
       "bestTime": "Morning after waking, midday, and before bed. Especially useful after prolonged sitting.",
       "reps": "3 reps each side",
       "freq": "2-3x daily",
@@ -86,11 +86,10 @@ const EXERCISE_DATA = {
       "type": "Stretch / Mobility",
       "purpose": "Improve cervical mobility by stretching the cervical rotators, suboccipitals, SCM, and scalenes.",
       "steps": [
-        "Sit upright.",
-        "For added mobilization, perform a chin tuck first (cervical retraction + rotation per McKenzie method).",
-        "Slowly turn your head to one side until a gentle stretch is felt.",
-        "Hold for 20-30 seconds.",
-        "Return to centre and repeat on the other side."
+        "Sit upright with good posture.",
+        "For added mobility, perform a gentle chin tuck first.",
+        "Slowly turn your head to one side as if looking over your shoulder until a gentle stretch is felt.",
+        "Hold for 20-30 seconds. Repeat on the other side."
       ],
       "notes": "Can use a towel wrapped at the base of the skull for segmental rotation. For added mobilization, perform a chin tuck first, then rotate (McKenzie method).",
       "bestTime": "Morning, midday, evening. Useful as a warm-up or during desk breaks.",
@@ -109,11 +108,11 @@ const EXERCISE_DATA = {
       "purpose": "Strengthen rhomboids, middle/lower trapezius, and posterior deltoid to support the neck and correct posture.",
       "steps": [
         "Sit or stand upright with arms at your sides.",
-        "Squeeze your shoulder blades together as if pinching a pencil between them.",
-        "Hold for 3-5 seconds. Do NOT shrug shoulders upward.",
-        "Keep abs engaged. Release slowly."
+        "Squeeze your shoulder blades together and slightly down, as if pinching a pencil between them.",
+        "Hold for 3-5 seconds. Do NOT shrug your shoulders up toward your ears.",
+        "Keep your chest open and release slowly."
       ],
-      "notes": "An endurance exercise — higher reps with good form are more beneficial than fewer heavy reps. Can add resistance band for progression. Do NOT shrug shoulders upward.",
+      "notes": "Focus on the lower part of the shoulder blades. Avoid arching your lower back.",
       "bestTime": "Throughout the day — especially during prolonged sitting. Every 1-2 hours as a posture reset.",
       "reps": "10-15 reps",
       "freq": "2-3x daily",
@@ -131,7 +130,7 @@ const EXERCISE_DATA = {
       "steps": [
         "Stand in a doorway with elbows bent at 90 degrees at shoulder height.",
         "Place forearms on the door frame.",
-        "Step one foot forward and lean until a stretch is felt across the chest.",
+        "Step one foot forward and lean until a gentle stretch is felt across the chest.",
         "Hold for 20-30 seconds, then step back to release."
       ],
       "notes": "Addresses the rounded-shoulder component of Upper Crossed Syndrome commonly seen in cervicogenic headache patients.",
@@ -146,16 +145,17 @@ const EXERCISE_DATA = {
     },
     {
       "id": 7,
-      "name": "Seated Trap Stretch (Upper Trapezius Stretch)",
+      "name": "Upper Trapezius Stretch (Anchored)",
       "type": "Stretch",
       "purpose": "Stretch the upper trapezius — directly linked to cervicogenic headache tension patterns.",
       "steps": [
-        "Sit with good posture. Place one hand behind your back.",
-        "Use the opposite hand to gently pull your head toward the opposite shoulder.",
-        "Do NOT rotate head — feel the stretch on the side of the neck.",
-        "Hold for 30 seconds. Return to centre and repeat on the other side."
+        "Sit on your right hand (this 'anchors' your shoulder down).",
+        "Slowly tilt your left ear toward your left shoulder.",
+        "Now, slightly turn your chin toward your left shoulder (the side you are tilting toward).",
+        "You should feel a deeper pull from the base of your skull to your shoulder point.",
+        "Hold for 30 seconds, then swap hands and repeat on the other side."
       ],
-      "notes": "Each side counts as one rep. Do NOT rotate head.",
+      "notes": "The anchor is key! Sitting on your hand prevents the shoulder from moving up, which isolates the trapezius muscle fibers.",
       "bestTime": "Morning, midday desk break, and evening. Anytime you notice upper trap tightness or tension building.",
       "reps": "3 reps each side",
       "freq": "2-3x daily",
@@ -172,10 +172,10 @@ const EXERCISE_DATA = {
       "purpose": "Strengthen cervical rotators, deep neck muscles, and SCM. Restore neck rotation range of motion.",
       "steps": [
         "Sit or stand in a comfortable position.",
-        "Place hand on the side of your head.",
-        "Gently turn head into the hand while the hand provides resistance (isometric).",
-        "Hold for 5-10 seconds.",
-        "Return to centre, pause, then repeat on the opposite side."
+        "Place your hand on the side of your head above the ear.",
+        "Gently try to turn your head into the hand while the hand provides resistance.",
+        "Hold the contraction for 5-10 seconds. Do not use maximum force.",
+        "Repeat on the opposite side."
       ],
       "notes": "Can also be done as gentle active rotation with hand providing mild overpressure at end range for mobility. Be gentle — cervicogenic headaches can be aggravated by excessive force.",
       "bestTime": "Morning and evening. Can also serve as a midday desk break exercise.",
@@ -193,13 +193,13 @@ const EXERCISE_DATA = {
       "type": "Stretch",
       "purpose": "Reduce tension in the levator scapulae — one of the main muscles associated with cervicogenic headache.",
       "steps": [
-        "Sit with good posture. Place one hand on the same-side shoulder blade.",
-        "Tuck your chin, then turn your head to the opposite side.",
-        "Look down toward the opposite armpit.",
-        "Use the free hand to gently add overpressure pulling the head forward and down.",
-        "Hold for 20-30 seconds. Return to centre and repeat on the other side."
+        "Sit with good posture. Grip the seat of the chair with one hand to anchor the shoulder.",
+        "Tuck your chin, then turn your head 45 degrees away from the anchored shoulder.",
+        "Look down toward your opposite armpit.",
+        "Gently add overpressure with the free hand, pulling the head forward and down.",
+        "Hold for 20-30 seconds. Repeat on the other side."
       ],
-      "notes": "You should feel a deep stretch at the base of the neck/top of the shoulder blade. Each side counts as one rep.",
+      "notes": "You should feel this stretch along the side and back of the neck down to the shoulder blade.",
       "bestTime": "Morning and evening. Also helpful during work breaks when neck/shoulder tension builds.",
       "reps": "3 reps each side",
       "freq": "2-3x daily",
