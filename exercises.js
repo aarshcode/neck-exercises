@@ -1,4 +1,4 @@
-{
+const EXERCISE_DATA = {
   "program": "Cervicogenic Headache Exercise Protocol",
   "disclaimer": "Compiled from physiotherapy literature and clinical protocols. Consult a physiotherapist before starting. Stop any exercise that worsens headache or causes sharp/radiating pain.",
   "sources": [
@@ -261,4 +261,4 @@
     "page_2011_review": "Page (2011) evidence-led review in the International Journal of Sports Physical Therapy recommended a multimodal approach: CCF training, upper-quarter stretching, scapular strengthening, and postural re-education.",
     "progression_note": "Benefits typically appear within 4-6 weeks of consistent daily practice. Full improvement may take 8-12 weeks."
   }
-}
+};

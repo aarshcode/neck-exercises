@@ -527,21 +527,17 @@
   </div>
 </div>
 
+<script src="exercises.js"></script>
 <script>
-let exercises = [];
-let TOTAL_EXERCISES = 0;
+const exercises = EXERCISE_DATA.exercises;
+const TOTAL_EXERCISES = exercises.length;
 
-// --- Load data from JSON ---
-async function loadData() {
-  const res = await fetch('exercises.json');
-  const data = await res.json();
-  exercises = data.exercises;
-  TOTAL_EXERCISES = exercises.length;
+function initFromData() {
   renderHome();
   renderProgressBar();
-  renderSchedule(data.suggested_daily_schedule);
-  renderResearch(data.key_research_findings);
-  renderSources(data.sources);
+  renderSchedule(EXERCISE_DATA.suggested_daily_schedule);
+  renderResearch(EXERCISE_DATA.key_research_findings);
+  renderSources(EXERCISE_DATA.sources);
 }
 
 function renderSchedule(schedule) {
@@ -1006,8 +1002,8 @@ function completeExercise() {
   }
 }
 
-// Initial render — load data from JSON
-loadData();
+// Initial render
+initFromData();
 </script>
 </body>
 </html>
