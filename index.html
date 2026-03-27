@@ -422,59 +422,212 @@
   .complete-screen h2 { font-size: 1.5rem; margin-bottom: 8px; }
   .complete-screen p { color: var(--muted); margin-bottom: 24px; }
 
+  /* Collapsible sections */
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .collapsible-header .toggle-icon {
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .collapsible-header.open .toggle-icon { transform: rotate(180deg); }
+  .collapsible-body {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 0;
+    opacity: 0;
+  }
+  .collapsible-body.open {
+    max-height: 2000px;
+    opacity: 1;
+  }
+
+  /* Sticky bottom nav for exercise view on mobile */
+  .bottom-nav {
+    display: none;
+  }
+
+  /* Daily summary bar */
+  .daily-summary {
+    max-width: 700px;
+    margin: 0 auto 8px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .daily-summary .done-count {
+    font-weight: 700;
+    color: var(--teal);
+  }
+
   /* Mobile responsive */
   @media (max-width: 600px) {
-    header { padding: 20px 16px 16px; }
-    header h1 { font-size: 1.3rem; }
-    .disclaimer { margin: 12px 10px; padding: 10px 14px; font-size: 0.8rem; }
-    .progress-bar { padding: 0 10px; margin: 10px auto; }
-    .view { padding: 10px; }
+    body {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    header {
+      padding: 16px 16px 12px;
+      padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 { font-size: 1.25rem; }
+    header p { font-size: 0.8rem; }
+    .disclaimer {
+      margin: 10px 12px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+    }
+    .progress-bar {
+      padding: 0 12px;
+      margin: 8px auto;
+      position: sticky;
+      top: calc(60px + env(safe-area-inset-top, 0px));
+      z-index: 99;
+      background: var(--bg);
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+    .progress-bar .seg { height: 5px; }
+    .view { padding: 8px 12px; }
 
-    .exercise-list li { padding: 12px 14px; gap: 10px; }
-    .exercise-list li .num { width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px; }
-    .exercise-list li .info h3 { font-size: 0.9rem; }
+    /* Exercise list — bigger touch targets */
+    .exercise-list li {
+      padding: 14px 16px;
+      gap: 12px;
+      min-height: 64px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .exercise-list li:active {
+      transform: scale(0.98);
+      background: var(--teal-light);
+    }
+    .exercise-list li .num {
+      width: 38px; height: 38px;
+      font-size: 0.9rem;
+      border-radius: 8px;
+    }
+    .exercise-list li .info h3 { font-size: 0.92rem; }
+    .exercise-list li .info span { font-size: 0.75rem; }
+    .exercise-list li .arrow { font-size: 1.4rem; }
 
-    .exercise-card { padding: 16px; }
-    .exercise-card h2 { font-size: 1.2rem; }
-    .exercise-card .purpose { font-size: 0.82rem; }
+    /* Start button */
+    .btn-start-all {
+      padding: 16px;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+
+    /* Exercise card */
+    .exercise-card {
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 80px; /* space for bottom nav */
+    }
+    .exercise-card h2 { font-size: 1.15rem; }
+    .exercise-card .type-badge { font-size: 0.7rem; }
+    .exercise-card .purpose { font-size: 0.82rem; margin-bottom: 12px; }
+    .exercise-card .steps { margin-bottom: 14px; }
+    .exercise-card .steps h4 { font-size: 0.8rem; margin-bottom: 6px; }
     .exercise-card .steps ol { padding-left: 18px; }
-    .exercise-card .steps li { font-size: 0.88rem; padding: 4px 0; }
+    .exercise-card .steps li { font-size: 0.88rem; padding: 5px 0; }
+    .exercise-card .notes { padding: 8px 12px; font-size: 0.78rem; margin-bottom: 12px; }
+    .exercise-card .best-time { font-size: 0.76rem; margin-bottom: 12px; }
 
-    .meta-row { flex-direction: row; gap: 6px; }
-    .meta-box { padding: 8px 6px; }
+    .meta-row { gap: 6px; margin-bottom: 14px; }
+    .meta-box { padding: 10px 6px; border-radius: 8px; }
     .meta-box .label { font-size: 0.6rem; }
-    .meta-box .value { font-size: 0.85rem; }
+    .meta-box .value { font-size: 0.9rem; }
 
-    .timer-display { font-size: 3rem; }
-    .rep-counter { font-size: 0.95rem; }
+    /* Timer — hero element on mobile */
+    .timer-area { margin: 16px 0; }
+    .timer-display { font-size: 4rem; margin-bottom: 2px; }
+    .timer-label { font-size: 0.9rem; margin-bottom: 10px; }
+    .rep-counter { font-size: 1rem; margin-bottom: 12px; }
+    .side-indicator { font-size: 0.9rem; padding: 5px 16px; }
 
-    .btn { min-width: 0; padding: 12px 10px; font-size: 0.88rem; }
-    .btn-row { gap: 6px; }
-    .nav-row { gap: 6px; flex-wrap: wrap; }
-    .nav-row .btn { flex: 1 1 auto; min-width: 0; padding: 12px 8px; font-size: 0.82rem; }
+    /* Buttons — bigger touch targets (min 48px) */
+    .btn {
+      min-width: 0;
+      min-height: 48px;
+      padding: 12px 14px;
+      font-size: 0.92rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-row {
+      gap: 8px;
+      justify-content: center;
+    }
 
-    .btn-start-all { padding: 14px; font-size: 1rem; }
+    /* Bottom nav bar */
+    .bottom-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid #e0e0e0;
+      padding: 8px 12px;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+      gap: 8px;
+      z-index: 100;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+    }
+    .bottom-nav .btn {
+      flex: 1;
+      min-height: 44px;
+      font-size: 0.85rem;
+      padding: 10px 6px;
+    }
 
-    .tips { padding: 0 10px 10px; }
+    /* Hide inline nav-row on mobile (replaced by bottom nav) */
+    .nav-row { display: none; }
+
+    /* Tips */
+    .tips { padding: 0 0 8px; margin: 16px auto; }
     .tips-grid { grid-template-columns: 1fr; gap: 6px; }
-    .tip-item { padding: 8px 12px; font-size: 0.8rem; }
+    .tip-item { padding: 10px 14px; font-size: 0.82rem; }
 
-    .schedule-section { padding: 0 10px; }
-    .schedule-card { padding: 12px 14px; }
-    .research-section { padding: 0 10px; }
-    .sources-section { padding: 0 10px 24px; }
+    /* Sections */
+    .schedule-section { padding: 0; margin: 14px auto; }
+    .schedule-card { padding: 12px 14px; margin-bottom: 8px; }
+    .schedule-card h4 { font-size: 0.9rem; }
+    .schedule-card ul li { font-size: 0.82rem; }
+    .research-section { padding: 0; margin: 14px auto; }
+    .research-card { padding: 12px 14px; font-size: 0.82rem; }
+    .sources-section { padding: 0; margin: 14px auto; padding-bottom: 20px; }
 
-    .complete-screen { padding: 40px 16px; }
-    .complete-screen .check { font-size: 3rem; }
+    /* Complete screen */
+    .complete-screen { padding: 50px 20px; }
+    .complete-screen .check { font-size: 3.5rem; }
     .complete-screen h2 { font-size: 1.3rem; }
   }
 
   @media (max-width: 360px) {
     header h1 { font-size: 1.1rem; }
-    .timer-display { font-size: 2.5rem; }
+    .timer-display { font-size: 3.2rem; }
     .exercise-card h2 { font-size: 1.05rem; }
-    .nav-row .btn { font-size: 0.75rem; padding: 10px 6px; }
-    .btn { font-size: 0.82rem; padding: 10px 8px; }
+    .bottom-nav .btn { font-size: 0.78rem; padding: 8px 4px; }
+    .btn { font-size: 0.85rem; }
+    .exercise-list li .info h3 { font-size: 0.85rem; }
   }
 </style>
 </head>
@@ -492,6 +645,7 @@
 <div class="progress-bar" id="progressBar"></div>
 
 <!-- HOME VIEW -->
+<div class="daily-summary" id="dailySummary"></div>
 <div class="view active" id="homeView">
   <ul class="exercise-list" id="exerciseList"></ul>
   <button class="btn-start-all" onclick="startAll()">Start Full Routine</button>
@@ -517,6 +671,9 @@
   <div class="exercise-card" id="exerciseCard"></div>
 </div>
 
+<!-- Bottom nav bar for mobile exercise view -->
+<div class="bottom-nav" id="bottomNav"></div>
+
 <!-- COMPLETE VIEW -->
 <div class="view" id="completeView">
   <div class="complete-screen">
@@ -540,6 +697,20 @@ function initFromData() {
   renderSources(EXERCISE_DATA.sources);
 }
 
+function makeCollapsible(title, bodyHtml, startOpen = false) {
+  const openClass = startOpen ? ' open' : '';
+  return `<h3 class="collapsible-header${openClass}" onclick="toggleCollapsible(this)">
+    ${title}<span class="toggle-icon">&#9660;</span>
+  </h3>
+  <div class="collapsible-body${openClass}">${bodyHtml}</div>`;
+}
+
+function toggleCollapsible(el) {
+  el.classList.toggle('open');
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+}
+
 function renderSchedule(schedule) {
   const container = document.getElementById('scheduleSection');
   const slots = [
@@ -548,18 +719,18 @@ function renderSchedule(schedule) {
     { key: 'evening', title: 'Evening' },
     { key: 'hourly_micro_breaks', title: 'Hourly Micro-breaks' }
   ];
-  let html = '<h3>Suggested Daily Schedule</h3>';
+  let body = '';
   for (const slot of slots) {
     const s = schedule[slot.key];
     const time = s.time || s.frequency || '';
-    html += `<div class="schedule-card">
+    body += `<div class="schedule-card">
       <h4>${slot.title}</h4>
       <div class="schedule-time">${time}</div>
       <div class="schedule-duration">~${s.approx_duration_minutes} minutes</div>
       <ul>${s.exercises.map(e => `<li>${e}</li>`).join('')}</ul>
     </div>`;
   }
-  container.innerHTML = html;
+  container.innerHTML = makeCollapsible('Suggested Daily Schedule', body);
 }
 
 function renderResearch(findings) {
@@ -570,20 +741,17 @@ function renderResearch(findings) {
     { key: 'page_2011_review', label: 'Page (2011) Review' },
     { key: 'progression_note', label: 'Progression note' }
   ];
-  let html = '<h3>Key Research Findings</h3>';
+  let body = '';
   for (const item of items) {
-    html += `<div class="research-card"><strong>${item.label}:</strong> ${findings[item.key]}</div>`;
+    body += `<div class="research-card"><strong>${item.label}:</strong> ${findings[item.key]}</div>`;
   }
-  container.innerHTML = html;
+  container.innerHTML = makeCollapsible('Key Research Findings', body);
 }
 
 function renderSources(sources) {
   const container = document.getElementById('sourcesSection');
-  container.innerHTML = `<h3>Sources</h3>
-    <details>
-      <summary>View all sources</summary>
-      <ul>${sources.map(s => `<li>${s}</li>`).join('')}</ul>
-    </details>`;
+  const body = `<ul>${sources.map(s => `<li>${s}</li>`).join('')}</ul>`;
+  container.innerHTML = makeCollapsible('Sources', body);
 }
 
 // --- localStorage daily tracking ---
@@ -674,6 +842,15 @@ function renderProgressBar() {
 function renderHome() {
   const list = document.getElementById('exerciseList');
   list.innerHTML = '';
+
+  // Daily summary
+  let totalDone = 0;
+  exercises.forEach((ex, i) => { if (isFullyDoneToday(i)) totalDone++; });
+  const summaryEl = document.getElementById('dailySummary');
+  if (summaryEl) {
+    summaryEl.innerHTML = `<span>Today's progress</span><span class="done-count">${totalDone} / ${TOTAL_EXERCISES} complete</span>`;
+  }
+
   exercises.forEach((ex, i) => {
     const li = document.createElement('li');
     li.onclick = () => startExercise(i);
@@ -700,6 +877,28 @@ function showView(name) {
   document.getElementById(name + 'View').classList.add('active');
   state.mode = name;
   renderProgressBar();
+  // Show/hide bottom nav and daily summary
+  const bottomNav = document.getElementById('bottomNav');
+  const dailySummary = document.getElementById('dailySummary');
+  if (name === 'exercise') {
+    renderBottomNav();
+    bottomNav.style.display = '';
+    if (dailySummary) dailySummary.style.display = 'none';
+  } else {
+    bottomNav.style.display = 'none';
+    bottomNav.innerHTML = '';
+    if (dailySummary) dailySummary.style.display = '';
+  }
+}
+
+function renderBottomNav() {
+  const bottomNav = document.getElementById('bottomNav');
+  bottomNav.innerHTML = `
+    <button class="btn btn-secondary" onclick="goHome()">Home</button>
+    ${state.currentIdx > 0 ? `<button class="btn btn-secondary" onclick="startExercise(${state.currentIdx - 1})">Prev</button>` : ''}
+    <button class="btn btn-success" onclick="completeExercise()">Done</button>
+    ${state.currentIdx < TOTAL_EXERCISES - 1 ? `<button class="btn btn-orange" onclick="startExercise(${state.currentIdx + 1})">Next</button>` : ''}
+  `;
 }
 
 function goHome() {
@@ -726,6 +925,7 @@ function startExercise(idx) {
   state.waiting = true;
   showView('exercise');
   renderExercise();
+  renderBottomNav();
 }
 
 function beginExercise() {
