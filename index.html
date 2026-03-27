@@ -121,6 +121,124 @@
   }
   .btn-start-all:hover { background: var(--teal-dark); }
 
+  /* Schedule section */
+  .schedule-section {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  .schedule-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: var(--teal);
+  }
+  .schedule-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .schedule-card h4 {
+    font-size: 0.95rem;
+    color: var(--teal);
+    margin-bottom: 2px;
+  }
+  .schedule-card .schedule-time {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .schedule-card .schedule-duration {
+    font-size: 0.75rem;
+    color: var(--orange);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .schedule-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .schedule-card ul li {
+    font-size: 0.85rem;
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .schedule-card ul li::before {
+    content: "\2022";
+    color: var(--teal);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+  }
+
+  /* Research section */
+  .research-section {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  .research-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--teal);
+  }
+  .research-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    font-size: 0.85rem;
+  }
+  .research-card strong {
+    color: var(--teal);
+  }
+
+  /* Sources section */
+  .sources-section {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 0 16px 30px;
+  }
+  .sources-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--teal);
+  }
+  .sources-section details {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .sources-section summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--teal);
+  }
+  .sources-section ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+  .sources-section ul li {
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .sources-section ul li::before {
+    content: "\2022";
+    color: var(--teal);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+  }
+
   /* Exercise view */
   .exercise-card {
     background: var(--card);
@@ -139,6 +257,16 @@
     margin-bottom: 8px;
   }
   .exercise-card h2 { font-size: 1.4rem; margin-bottom: 4px; }
+  .exercise-card .type-badge {
+    display: inline-block;
+    background: var(--teal-light);
+    color: var(--teal);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
   .exercise-card .purpose {
     color: var(--teal);
     font-style: italic;
@@ -158,6 +286,21 @@
     background: var(--teal-light);
     padding-left: 6px;
     font-weight: 600;
+  }
+  .exercise-card .notes {
+    background: #f0f9f8;
+    border-left: 3px solid var(--teal);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .exercise-card .notes strong { color: var(--teal); }
+  .exercise-card .best-time {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 16px;
   }
   .meta-row {
     display: flex;
@@ -246,7 +389,7 @@
   .tips {
     max-width: 700px;
     margin: 20px auto;
-    padding: 0 16px 30px;
+    padding: 0 16px 10px;
   }
   .tips h3 {
     font-size: 1.1rem;
@@ -312,9 +455,14 @@
 
     .btn-start-all { padding: 14px; font-size: 1rem; }
 
-    .tips { padding: 0 10px 24px; }
+    .tips { padding: 0 10px 10px; }
     .tips-grid { grid-template-columns: 1fr; gap: 6px; }
     .tip-item { padding: 8px 12px; font-size: 0.8rem; }
+
+    .schedule-section { padding: 0 10px; }
+    .schedule-card { padding: 12px 14px; }
+    .research-section { padding: 0 10px; }
+    .sources-section { padding: 0 10px 24px; }
 
     .complete-screen { padding: 40px 16px; }
     .complete-screen .check { font-size: 3rem; }
@@ -334,11 +482,11 @@
 
 <header>
   <h1>Cervicogenic Headache Exercises</h1>
-  <p>A Physiotherapy Guide</p>
+  <p>Cervicogenic Headache Exercise Protocol</p>
 </header>
 
 <div class="disclaimer">
-  <strong>Important:</strong> Consult a physiotherapist before starting these exercises. They can assess your specific condition and ensure proper technique.
+  <strong>Important:</strong> Compiled from physiotherapy literature and clinical protocols. Consult a physiotherapist before starting. Stop any exercise that worsens headache or causes sharp/radiating pain.
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
@@ -352,11 +500,99 @@
     <div class="tips-grid">
       <div class="tip-item"><strong>Start slowly</strong> — Progress gradually, don't rush into full intensity.</div>
       <div class="tip-item"><strong>Pain rule</strong> — Never push through sharp pain. Stop if pain increases.</div>
-      <div class="tip-item"><strong>Be consistent</strong> — Regularity matters more than intensity.</div>
+      <div class="tip-item"><strong>Be consistent</strong> — Regularity matters more than intensity. Benefits appear within 4-6 weeks.</div>
       <div class="tip-item"><strong>Good posture</strong> — Maintain good posture throughout the day.</div>
-      <div class="tip-item"><strong>Desk breaks</strong> — Stretch every 30-60 minutes at your desk.</div>
-      <div class="tip-item"><strong>Ice / Heat</strong> — Heat before exercise, ice after for inflammation.</div>
+      <div class="tip-item"><strong>Desk breaks</strong> — Shoulder blade squeezes + chin tucks every 1-2 hours.</div>
+      <div class="tip-item"><strong>Full results</strong> — Full improvement may take 8-12 weeks of consistent daily practice.</div>
     </div>
+  </div>
+
+  <div class="schedule-section">
+    <h3>Suggested Daily Schedule</h3>
+    <div class="schedule-card">
+      <h4>Morning</h4>
+      <div class="schedule-time">7:00-8:00 AM (upon waking or before work)</div>
+      <div class="schedule-duration">~12-15 minutes</div>
+      <ul>
+        <li>Chin Tucks — 3 x 10 reps</li>
+        <li>Craniocervical Flexion — 1-2 sets x 10 reps (supine)</li>
+        <li>Lateral Neck Flexion Stretch — 3 x 30s each side</li>
+        <li>Neck Rotation Stretch — 3 x 20-30s each side</li>
+        <li>Doorway Chest Stretch — 3 x 30s</li>
+        <li>Seated Deep Levator Stretch — 3 x 30s each side</li>
+      </ul>
+    </div>
+    <div class="schedule-card">
+      <h4>Midday</h4>
+      <div class="schedule-time">12:00-1:00 PM (desk break / lunch)</div>
+      <div class="schedule-duration">~8-10 minutes</div>
+      <ul>
+        <li>Chin Tucks — 3 x 10 reps</li>
+        <li>Shoulder Blade Squeeze — 2 x 15 reps</li>
+        <li>Seated Trap Stretch — 3 x 30s each side</li>
+        <li>Seated Deep Levator Stretch — 3 x 30s each side</li>
+      </ul>
+    </div>
+    <div class="schedule-card">
+      <h4>Evening</h4>
+      <div class="schedule-time">7:00-9:00 PM (post-work / before bed)</div>
+      <div class="schedule-duration">~12-15 minutes</div>
+      <ul>
+        <li>Chin Tucks — 3 x 10 reps</li>
+        <li>Craniocervical Flexion — 1-2 sets x 10 reps (supine)</li>
+        <li>Head Turns with Hand — 2 x 10 reps each side</li>
+        <li>Shoulder Blade Squeeze — 2 x 15 reps</li>
+        <li>Doorway Chest Stretch — 3 x 30s</li>
+        <li>Neck Rotation Stretch — 3 x 20-30s each side</li>
+        <li>Seated Trap Stretch — 3 x 30s each side</li>
+      </ul>
+    </div>
+    <div class="schedule-card">
+      <h4>Hourly Micro-breaks</h4>
+      <div class="schedule-time">Every 1-2 hours during prolonged sitting</div>
+      <div class="schedule-duration">~1-2 minutes</div>
+      <ul>
+        <li>Shoulder Blade Squeeze — 10 reps, 5s hold</li>
+        <li>Quick Chin Tuck — 5 reps</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="research-section">
+    <h3>Key Research Findings</h3>
+    <div class="research-card">
+      <strong>Jull et al. (2002) RCT:</strong> Randomized controlled trial of 200 cervicogenic headache patients found exercise therapy (CCF + scapular exercises) significantly reduced headache frequency, intensity, and duration. Combined exercise + manipulative therapy was most effective.
+    </div>
+    <div class="research-card">
+      <strong>Ylinen et al. (2010) RCT:</strong> Strength training combined with stretching reduced cervicogenic headache by 69% at 12-month follow-up, compared to 37% with stretching alone.
+    </div>
+    <div class="research-card">
+      <strong>Page (2011) Review:</strong> Evidence-led review in the International Journal of Sports Physical Therapy recommended a multimodal approach: CCF training, upper-quarter stretching, scapular strengthening, and postural re-education.
+    </div>
+    <div class="research-card">
+      <strong>Progression note:</strong> Benefits typically appear within 4-6 weeks of consistent daily practice. Full improvement may take 8-12 weeks.
+    </div>
+  </div>
+
+  <div class="sources-section">
+    <h3>Sources</h3>
+    <details>
+      <summary>View all sources</summary>
+      <ul>
+        <li>Physiopedia - Deep Neck Flexor Stabilisation Protocol (Jull et al.)</li>
+        <li>PMC - Cervicogenic Headaches: An Evidence-Led Approach to Clinical Management (Page, 2011)</li>
+        <li>PubMed - Effect of neck exercises on cervicogenic headache (Ylinen et al., 2010)</li>
+        <li>ProResults Physical Therapy - 3 Exercises to Ease Cervicogenic Headaches</li>
+        <li>Hulst Jepsen Physical Therapy - 5 Exercises for Headaches</li>
+        <li>Katie E Good DPT - 7 Most Effective Cervicogenic Headache Exercises</li>
+        <li>Lattimore PT - 5 Exercises for Cervicogenic Headaches</li>
+        <li>Barrow Neurological Institute - Lewis Headache Center Posture Program</li>
+        <li>Armor Physical Therapy - Cervicogenic Headache Treatment</li>
+        <li>Arnold Palmer Hospital - Scapular Stabilization Protocol</li>
+        <li>UCSF Orthopaedic Institute - Scapular Stabilization Protocol</li>
+        <li>Hinge Health - Exercises for Cervicogenic Headaches</li>
+      </ul>
+    </details>
   </div>
 </div>
 
@@ -378,116 +614,138 @@
 <script>
 const exercises = [
   {
-    id: 1, name: "Chin Tucks",
-    purpose: "Counteract forward head posture, which strains the neck and contributes to cervicogenic headache.",
+    id: 1, name: "Chin Tucks (Cervical Retraction)",
+    type: "Strengthening / Mobility",
+    purpose: "Strengthen deep cervical flexors (longus colli, longus capitis) and suboccipitals to counteract forward head posture.",
     steps: [
-      "Stand in a comfortable position.",
-      "Nod your head slightly to bring your chin toward your chest.",
-      "Glide or retract your chin back, relaxing your jaw muscles as you hold.",
-      "Relax your neck muscles to return to the starting position."
+      "Sit, stand, or lie on your back with a rolled towel under the neck (supine is easiest for beginners).",
+      "Keeping your jaw relaxed, glide your chin straight back in the horizontal plane — like making a double chin.",
+      "Hold for 3-5 seconds. Do NOT flex chin to chest — translate head straight back.",
+      "Relax and return to starting position."
     ],
-    reps: "10–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 12, hasSides: false, timesPerDay: 3
+    notes: "Can be done seated, standing, or supine. Supine is easiest for beginners. Do NOT flex chin to chest — translate head straight back in the horizontal plane.",
+    bestTime: "Morning, midday desk break, evening. Spread evenly throughout the day.",
+    reps: "10 reps", freq: "2-3x daily", holdSec: 4, totalReps: 10, sets: 3, hasSides: false, timesPerDay: 3
   },
   {
     id: 2, name: "Craniocervical Flexion (CCF)",
-    purpose: "Activate deep neck flexor muscles to support the cervical spine.",
+    type: "Deep Neck Flexor Strengthening / Motor Control",
+    purpose: "Activate deep neck flexor muscles (longus capitis, longus colli) to support the cervical spine.",
     steps: [
       "Lie on your back with a rolled towel under your neck.",
-      "Slowly nod your head as if saying \"yes\" in slow motion.",
-      "Keep movement small and controlled.",
-      "Return to the starting position with control."
+      "Slowly nod your head as if saying \"yes\" in slow motion — a gentle upper cervical nod.",
+      "Keep the movement small and controlled. Do not lift your head off the surface.",
+      "Hold for 10 seconds, then return to starting position with control.",
+      "Focus on engaging deep muscles without activating superficial neck muscles (SCM)."
     ],
-    reps: "10–12 reps", freq: "2x daily", holdSec: 3, totalReps: 11, hasSides: false, timesPerDay: 2
+    notes: "Ideally done with pressure biofeedback unit (Stabilizer) starting at 20 mmHg, progressing in 2 mmHg increments to 30 mmHg. Without biofeedback, focus on gentle upper neck nod without engaging superficial neck muscles (SCM). Progress slowly over weeks.",
+    bestTime: "Morning or evening in a quiet setting (requires focus and concentration). Supine position needed.",
+    reps: "10 reps", freq: "1-2x daily", holdSec: 10, totalReps: 10, sets: 2, hasSides: false, timesPerDay: 2
   },
   {
-    id: 3, name: "Lateral Neck Flexion",
-    purpose: "Ease tension on the sides of the neck.",
+    id: 3, name: "Lateral Neck Flexion Stretch",
+    type: "Stretch",
+    purpose: "Stretch the upper trapezius, scalenes, and lateral cervical muscles to ease tension on the sides of the neck.",
     steps: [
-      "Sit upright.",
-      "Slowly tilt your right ear toward your right shoulder — don't force it.",
-      "Hold for 15–20 seconds.",
-      "Lift back to centre and repeat on the left side."
+      "Sit upright. Grip the seat of the chair with one hand to anchor the shoulder down.",
+      "Slowly tilt your ear toward the opposite shoulder — do not rotate your head, keep eyes forward.",
+      "Hold for 30 seconds.",
+      "Lift back to centre and repeat on the other side."
     ],
-    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true, timesPerDay: 1
+    notes: "Grip the seat of a chair with the opposite hand to anchor the shoulder down for a deeper stretch. Do NOT rotate head — keep eyes forward.",
+    bestTime: "Morning after waking, midday, and before bed. Especially useful after prolonged sitting.",
+    reps: "3 reps each side", freq: "2-3x daily", holdSec: 30, totalReps: 3, sets: 1, hasSides: true, timesPerDay: 3
   },
   {
     id: 4, name: "Neck Rotation Stretch",
-    purpose: "Improve neck mobility and reduce stiffness.",
+    type: "Stretch / Mobility",
+    purpose: "Improve cervical mobility by stretching the cervical rotators, suboccipitals, SCM, and scalenes.",
     steps: [
       "Sit upright.",
-      "Slowly turn your head to look over your right shoulder.",
-      "Hold gently at the end range.",
-      "Return to centre and repeat on the left side."
-    ],
-    reps: "5–8 reps each side", freq: "Daily", holdSec: 17, totalReps: 6, hasSides: true, timesPerDay: 1
-  },
-  {
-    id: 5, name: "Shoulder Blade Squeeze",
-    purpose: "Strengthen upper back muscles to support the neck.",
-    steps: [
-      "Sit upright.",
-      "Squeeze your shoulder blades together as if pinching a pencil between them.",
-      "Hold, then release slowly."
-    ],
-    reps: "12–15 reps", freq: "2–3x daily", holdSec: 4, totalReps: 13, hasSides: false, timesPerDay: 3
-  },
-  {
-    id: 6, name: "Doorway Chest Stretch",
-    purpose: "Open chest and shoulder muscles to counteract slouched posture.",
-    steps: [
-      "Stand in a doorway with elbows bent, each forearm resting on one side of the door frame at chest height.",
-      "Step one foot through the doorway, moving hips and chest forward while forearms stay in place.",
-      "Focus on creating length through your chest and arms.",
-      "Move your hips and chest back to relax out of the stretch."
-    ],
-    reps: "2–3 reps", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: false, timesPerDay: 1
-  },
-  {
-    id: 7, name: "Seated Trap Stretch",
-    purpose: "Stretch the trapezius — directly linked to cervicogenic headache.",
-    steps: [
-      "Sit upright with your arms at your sides.",
-      "Hold the side of the chair with your right hand to anchor the shoulder down.",
-      "Tilt your head to the left, dropping your left ear as if listening to the front of your underarm.",
-      "Keep shoulders relaxed as you hold. Lift your head to return, then repeat on the other side."
-    ],
-    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true, timesPerDay: 1
-  },
-  {
-    id: 8, name: "Head Turns with Hand",
-    purpose: "Restore neck rotation range of motion for daily activities.",
-    steps: [
-      "Sit or stand in a comfortable position.",
-      "Rotate your head as if looking over your shoulder.",
-      "Gently add pressure to your chin or cheek to increase the stretch.",
-      "Return to centre, pause, then rotate the opposite direction.",
-      "Only go as far as feels comfortable — don't force the stretch."
-    ],
-    reps: "5–8 reps each side", freq: "Daily", holdSec: 12, totalReps: 6, hasSides: true, timesPerDay: 1
-  },
-  {
-    id: 9, name: "Seated Deep Levator Stretch",
-    purpose: "Reduce tension in the levator scapulae — one of the main muscles associated with cervicogenic headache.",
-    steps: [
-      "Sit tall with one hand lightly grasping the side of your chair.",
-      "Bring your gaze about halfway toward your opposite shoulder, then look down toward that armpit.",
-      "Place your opposite hand on your head to add gentle pressure to the stretch.",
+      "For added mobilization, perform a chin tuck first (cervical retraction + rotation per McKenzie method).",
+      "Slowly turn your head to one side until a gentle stretch is felt.",
+      "Hold for 20-30 seconds.",
       "Return to centre and repeat on the other side."
     ],
-    reps: "2–3 reps each side", freq: "Daily", holdSec: 25, totalReps: 3, hasSides: true, timesPerDay: 1
+    notes: "Can use a towel wrapped at the base of the skull for segmental rotation. For added mobilization, perform a chin tuck first, then rotate (McKenzie method).",
+    bestTime: "Morning, midday, evening. Useful as a warm-up or during desk breaks.",
+    reps: "3-5 reps each side", freq: "2-3x daily", holdSec: 25, totalReps: 4, sets: 1, hasSides: true, timesPerDay: 3
   },
   {
-    id: 10, name: "Bent Over IYT",
-    purpose: "Strengthen upper back muscles to take pressure off the neck during prolonged sitting.",
+    id: 5, name: "Shoulder Blade Squeeze (Scapular Retraction)",
+    type: "Strengthening / Postural Endurance",
+    purpose: "Strengthen rhomboids, middle/lower trapezius, and posterior deltoid to support the neck and correct posture.",
     steps: [
-      "Hinge at your hips to bend your chest toward the floor. Knees soft, back flat, arms hanging straight down.",
-      "Lift arms straight up close to your ears into the I position. Hold, then lower.",
-      "Lift arms up and out at an angle into the Y position. Hold, then lower.",
-      "Lift arms out to the sides into the T position, squeezing upper back muscles. Hold, then lower."
+      "Sit or stand upright with arms at your sides.",
+      "Squeeze your shoulder blades together as if pinching a pencil between them.",
+      "Hold for 3-5 seconds. Do NOT shrug shoulders upward.",
+      "Keep abs engaged. Release slowly."
     ],
-    reps: "8–10 reps per set", freq: "2x daily", holdSec: 3, totalReps: 9, hasSides: false, timesPerDay: 2
+    notes: "An endurance exercise — higher reps with good form are more beneficial than fewer heavy reps. Can add resistance band for progression. Do NOT shrug shoulders upward.",
+    bestTime: "Throughout the day — especially during prolonged sitting. Every 1-2 hours as a posture reset.",
+    reps: "10-15 reps", freq: "2-3x daily", holdSec: 4, totalReps: 12, sets: 3, hasSides: false, timesPerDay: 3
+  },
+  {
+    id: 6, name: "Doorway Chest Stretch (Pectoralis Stretch)",
+    type: "Stretch",
+    purpose: "Open pectoralis major/minor and anterior deltoid to counteract the rounded-shoulder component of Upper Crossed Syndrome.",
+    steps: [
+      "Stand in a doorway with elbows bent at 90 degrees at shoulder height.",
+      "Place forearms on the door frame.",
+      "Step one foot forward and lean until a stretch is felt across the chest.",
+      "Hold for 20-30 seconds, then step back to release."
+    ],
+    notes: "Addresses the rounded-shoulder component of Upper Crossed Syndrome commonly seen in cervicogenic headache patients.",
+    bestTime: "Morning and/or evening. Especially important after prolonged desk/computer work.",
+    reps: "3 reps", freq: "1-2x daily", holdSec: 25, totalReps: 3, sets: 1, hasSides: false, timesPerDay: 2
+  },
+  {
+    id: 7, name: "Seated Trap Stretch (Upper Trapezius Stretch)",
+    type: "Stretch",
+    purpose: "Stretch the upper trapezius — directly linked to cervicogenic headache tension patterns.",
+    steps: [
+      "Sit with good posture. Place one hand behind your back.",
+      "Use the opposite hand to gently pull your head toward the opposite shoulder.",
+      "Do NOT rotate head — feel the stretch on the side of the neck.",
+      "Hold for 30 seconds. Return to centre and repeat on the other side."
+    ],
+    notes: "Each side counts as one rep. Do NOT rotate head.",
+    bestTime: "Morning, midday desk break, and evening. Anytime you notice upper trap tightness or tension building.",
+    reps: "3 reps each side", freq: "2-3x daily", holdSec: 30, totalReps: 3, sets: 1, hasSides: true, timesPerDay: 3
+  },
+  {
+    id: 8, name: "Head Turns with Hand (Isometric Cervical Rotation)",
+    type: "Strengthening / Mobility",
+    purpose: "Strengthen cervical rotators, deep neck muscles, and SCM. Restore neck rotation range of motion.",
+    steps: [
+      "Sit or stand in a comfortable position.",
+      "Place hand on the side of your head.",
+      "Gently turn head into the hand while the hand provides resistance (isometric).",
+      "Hold for 5-10 seconds.",
+      "Return to centre, pause, then repeat on the opposite side."
+    ],
+    notes: "Can also be done as gentle active rotation with hand providing mild overpressure at end range for mobility. Be gentle — cervicogenic headaches can be aggravated by excessive force.",
+    bestTime: "Morning and evening. Can also serve as a midday desk break exercise.",
+    reps: "10 reps each side", freq: "2x daily", holdSec: 7, totalReps: 10, sets: 2, hasSides: true, timesPerDay: 2
+  },
+  {
+    id: 9, name: "Seated Deep Levator Stretch (Levator Scapulae Stretch)",
+    type: "Stretch",
+    purpose: "Reduce tension in the levator scapulae — one of the main muscles associated with cervicogenic headache.",
+    steps: [
+      "Sit with good posture. Place one hand on the same-side shoulder blade.",
+      "Tuck your chin, then turn your head to the opposite side.",
+      "Look down toward the opposite armpit.",
+      "Use the free hand to gently add overpressure pulling the head forward and down.",
+      "Hold for 20-30 seconds. Return to centre and repeat on the other side."
+    ],
+    notes: "You should feel a deep stretch at the base of the neck/top of the shoulder blade. Each side counts as one rep.",
+    bestTime: "Morning and evening. Also helpful during work breaks when neck/shoulder tension builds.",
+    reps: "3 reps each side", freq: "2-3x daily", holdSec: 25, totalReps: 3, sets: 1, hasSides: true, timesPerDay: 3
   }
 ];
+
+const TOTAL_EXERCISES = exercises.length;
 
 // --- localStorage daily tracking ---
 function getTodayKey() {
@@ -676,8 +934,9 @@ function renderExercise() {
   const isWarning = state.timerRunning && state.timerValue <= 3 && state.timerValue > 0;
 
   card.innerHTML = `
-    <div class="badge">Exercise ${ex.id} of 10</div>
+    <div class="badge">Exercise ${ex.id} of ${TOTAL_EXERCISES}</div>
     <h2>${ex.name}</h2>
+    <div class="type-badge">${ex.type}</div>
     <p class="purpose">${ex.purpose}</p>
     <div class="meta-row">
       <div class="meta-box"><div class="label">Reps</div><div class="value">${ex.reps}</div></div>
@@ -688,6 +947,8 @@ function renderExercise() {
       <h4>How To Do It</h4>
       <ol>${stepsHtml}</ol>
     </div>
+    <div class="notes"><strong>Note:</strong> ${ex.notes}</div>
+    <div class="best-time"><strong>Best time:</strong> ${ex.bestTime}</div>
     <div class="timer-area">
       ${sideLabel}
       ${state.waiting ? '' : `<div class="rep-counter">Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>`}
@@ -707,7 +968,7 @@ function renderExercise() {
       <button class="btn btn-secondary" onclick="goHome()">&#8592; Home</button>
       ${state.currentIdx > 0 ? `<button class="btn btn-secondary" onclick="startExercise(${state.currentIdx - 1})">&#8592; Prev</button>` : ''}
       <button class="btn btn-success" onclick="completeExercise()">Done &#10003;</button>
-      ${state.currentIdx < 9 ? `<button class="btn btn-orange" onclick="startExercise(${state.currentIdx + 1})">Next &#8594;</button>` : ''}
+      ${state.currentIdx < TOTAL_EXERCISES - 1 ? `<button class="btn btn-orange" onclick="startExercise(${state.currentIdx + 1})">Next &#8594;</button>` : ''}
     </div>
   `;
 }
@@ -893,9 +1154,9 @@ function completeExercise() {
   clearTimer();
   recordCompletion(state.currentIdx);
   state.completed.add(state.currentIdx);
-  if (state.sequential && state.currentIdx < 9) {
+  if (state.sequential && state.currentIdx < TOTAL_EXERCISES - 1) {
     startExercise(state.currentIdx + 1);
-  } else if (state.sequential && state.currentIdx === 9) {
+  } else if (state.sequential && state.currentIdx === TOTAL_EXERCISES - 1) {
     showView('complete');
   } else {
     goHome();
