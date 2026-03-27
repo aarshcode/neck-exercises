@@ -792,6 +792,7 @@ let state = {
   mode: 'home', // home | exercise | complete
   sequential: false,
   currentIdx: 0,
+  currentSet: 0,
   currentRep: 0,
   currentSide: 'right',
   timerValue: 0,
@@ -800,6 +801,7 @@ let state = {
   completed: new Set(),
   stepHighlight: -1,
   resting: false,
+  restingBetweenSets: false,
   restCountdown: 0,
   paused: false,
   pausedPhase: null, // 'hold' or 'rest'
@@ -863,7 +865,7 @@ function renderHome() {
       <div class="num ${fullyDone ? 'completed' : ''}">${fullyDone ? '&#10003;' : ex.id}</div>
       <div class="info">
         <h3>${ex.name}</h3>
-        <span>${ex.reps} &middot; ${ex.freq} &middot; ${ex.holdSec}s hold</span>
+        <span>${ex.sets > 1 ? ex.sets + ' sets x ' : ''}${ex.reps} &middot; ${ex.freq} &middot; ${ex.holdSec}s hold</span>
         ${progressText ? `<br><span class="daily-progress ${fullyDone ? 'done' : 'partial'}">${progressText}</span>` : ''}
       </div>
       <div class="arrow">&#8250;</div>
@@ -917,12 +919,14 @@ function startAll() {
 function startExercise(idx) {
   clearTimer();
   state.currentIdx = idx;
+  state.currentSet = 0;
   state.currentRep = 0;
   state.currentSide = 'right';
   state.timerValue = 0;
   state.timerRunning = false;
   state.stepHighlight = -1;
   state.waiting = true;
+  state.restingBetweenSets = false;
   showView('exercise');
   renderExercise();
   renderBottomNav();
@@ -979,7 +983,7 @@ function renderExercise() {
     <p class="purpose">${ex.purpose}</p>
     <div class="meta-row">
       <div class="meta-box"><div class="label">Reps</div><div class="value">${ex.reps}</div></div>
-      <div class="meta-box"><div class="label">Frequency</div><div class="value">${ex.freq}</div></div>
+      <div class="meta-box"><div class="label">Sets</div><div class="value">${ex.sets}</div></div>
       <div class="meta-box"><div class="label">Hold</div><div class="value">${ex.holdSec}s</div></div>
     </div>
     <div class="steps">
@@ -990,9 +994,9 @@ function renderExercise() {
     <div class="best-time"><strong>Best time:</strong> ${ex.bestTime}</div>
     <div class="timer-area">
       ${sideLabel}
-      ${state.waiting ? '' : `<div class="rep-counter">Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>`}
+      ${state.waiting ? '' : `<div class="rep-counter">${ex.sets > 1 ? `Set <span>${state.currentSet + 1}</span> of ${ex.sets} &mdash; ` : ''}Rep <span>${state.currentRep + 1}</span> of ${ex.totalReps}${ex.hasSides ? ' (per side)' : ''}</div>`}
       ${state.waiting ? '' : `<div class="timer-display ${state.getReady || isWarning || state.resting ? 'warning' : ''}" id="timerDisp">${state.getReady ? formatTime(state.getReadyCount) : (state.resting ? formatTime(state.restCountdown) : timeStr)}</div>`}
-      ${state.waiting ? '' : `<div class="timer-label" id="timerLabel">${state.getReady ? 'Get ready...' : (state.paused ? 'Paused' : (state.resting ? 'Next rep in...' : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!'))))}</div>`}
+      ${state.waiting ? '' : `<div class="timer-label" id="timerLabel">${state.getReady ? 'Get ready...' : (state.paused ? 'Paused' : (state.resting ? (state.restingBetweenSets ? 'Next set in...' : 'Next rep in...') : (state.timerRunning ? 'Hold...' : (state.timerValue === 0 ? 'Ready' : 'Done!'))))}</div>`}
       <div class="btn-row">
         ${state.waiting ? `<button class="btn btn-primary" onclick="beginExercise()" style="font-size:1.1rem;padding:14px 36px">&#9654; Start</button>` : ''}
         ${!state.waiting && state.getReady ? `<button class="btn btn-success" onclick="skipGetReady()">Skip</button>` : ''}
@@ -1057,6 +1061,7 @@ function resumeAll() {
   state.paused = false;
   if (state.pausedPhase === 'rest') {
     state.resting = true;
+    const isBetweenSets = state.restingBetweenSets;
     renderExercise();
     state.timerInterval = setInterval(() => {
       state.restCountdown--;
@@ -1066,11 +1071,12 @@ function resumeAll() {
         disp.textContent = formatTime(state.restCountdown);
         disp.className = 'timer-display warning';
       }
-      if (label) label.textContent = 'Next rep in...';
+      if (label) label.textContent = isBetweenSets ? 'Next set in...' : 'Next rep in...';
       if (state.restCountdown <= 0) {
         clearInterval(state.timerInterval);
         state.timerInterval = null;
         state.resting = false;
+        state.restingBetweenSets = false;
         startTimer();
       }
     }, 1000);
@@ -1102,6 +1108,7 @@ function clearTimer() {
   state.timerInterval = null;
   state.timerRunning = false;
   state.resting = false;
+  state.restingBetweenSets = false;
   state.restCountdown = 0;
   state.paused = false;
   state.pausedPhase = null;
@@ -1123,6 +1130,7 @@ function skipRest() {
   clearInterval(state.timerInterval);
   state.timerInterval = null;
   state.resting = false;
+  state.restingBetweenSets = false;
   state.restCountdown = 0;
   startTimer();
 }
@@ -1132,7 +1140,7 @@ function advanceRep() {
   if (ex.hasSides && state.currentSide === 'right') {
     state.currentSide = 'left';
     state.stepHighlight = -1;
-    startRestCountdown();
+    startRestCountdown(3, false);
     return;
   }
   // Completed one full rep (both sides or no sides)
@@ -1140,17 +1148,29 @@ function advanceRep() {
   state.currentSide = 'right';
   state.stepHighlight = -1;
   if (state.currentRep >= ex.totalReps) {
-    completeExercise();
+    // End of set — check if more sets remain
+    state.currentSet++;
+    if (state.currentSet >= ex.sets) {
+      // All sets done
+      completeExercise();
+      return;
+    }
+    // More sets — reset reps and give longer rest between sets
+    state.currentRep = 0;
+    state.currentSide = 'right';
+    beep(600, 200, 2);
+    startRestCountdown(10, true);
     return;
   }
-  startRestCountdown();
+  startRestCountdown(3, false);
 }
 
-function startRestCountdown() {
-  state.restCountdown = 3;
+function startRestCountdown(seconds, isBetweenSets) {
+  state.restCountdown = seconds;
   state.timerValue = 0;
   state.timerRunning = false;
   state.resting = true;
+  state.restingBetweenSets = isBetweenSets;
   renderExercise();
   state.timerInterval = setInterval(() => {
     state.restCountdown--;
@@ -1160,11 +1180,12 @@ function startRestCountdown() {
       disp.textContent = formatTime(state.restCountdown);
       disp.className = 'timer-display warning';
     }
-    if (label) label.textContent = 'Next rep in...';
+    if (label) label.textContent = isBetweenSets ? 'Next set in...' : 'Next rep in...';
     if (state.restCountdown <= 0) {
       clearInterval(state.timerInterval);
       state.timerInterval = null;
       state.resting = false;
+      state.restingBetweenSets = false;
       startTimer();
     }
   }, 1000);
@@ -1181,11 +1202,17 @@ function resetRep() {
     } else if (state.currentRep > 0) {
       state.currentRep--;
       state.currentSide = ex.hasSides ? 'right' : 'right';
+    } else if (state.currentSet > 0 && state.currentRep === 0) {
+      // Start of new set — go back to last rep of previous set
+      state.currentSet--;
+      state.currentRep = ex.totalReps - 1;
+      state.currentSide = ex.hasSides ? 'right' : 'right';
     }
   }
   state.timerValue = 0;
   state.timerRunning = false;
   state.stepHighlight = -1;
+  state.restingBetweenSets = false;
   renderExercise();
 }
 
