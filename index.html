@@ -105,6 +105,39 @@
   .daily-progress.partial { color: var(--orange); }
   .exercise-list li .arrow { color: var(--muted); font-size: 1.2rem; }
 
+  /* Session dots */
+  .session-dots {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+    align-items: center;
+  }
+  .session-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background 0.2s;
+  }
+  .session-dot.done { background: #27ae60; }
+  .session-dot.current { background: var(--orange); }
+
+  /* Session banner in exercise card */
+  .session-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--teal-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+  }
+  .session-banner .session-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--teal);
+  }
+  .session-banner .session-dots { margin-top: 0; }
+
   .btn-start-all {
     display: block;
     width: 100%;
@@ -858,15 +891,17 @@ function renderHome() {
     li.onclick = () => startExercise(i);
     const doneCount = getTimesCompleted(i);
     const fullyDone = doneCount >= ex.timesPerDay;
-    const progressText = ex.timesPerDay > 1
-      ? `${doneCount}/${ex.timesPerDay} today`
-      : (fullyDone ? 'Done today' : '');
+    const dots = Array.from({ length: ex.timesPerDay }, (_, d) => {
+      let cls = 'session-dot';
+      if (d < doneCount) cls += ' done';
+      return `<div class="${cls}"></div>`;
+    }).join('');
     li.innerHTML = `
       <div class="num ${fullyDone ? 'completed' : ''}">${fullyDone ? '&#10003;' : ex.id}</div>
       <div class="info">
         <h3>${ex.name}</h3>
-        <span>${ex.sets > 1 ? ex.sets + ' sets x ' : ''}${ex.reps} &middot; ${ex.freq} &middot; ${ex.holdSec}s hold</span>
-        ${progressText ? `<br><span class="daily-progress ${fullyDone ? 'done' : 'partial'}">${progressText}</span>` : ''}
+        <span>${ex.sets > 1 ? ex.sets + ' sets &times; ' : ''}${ex.reps} &middot; ${ex.holdSec}s hold</span>
+        <div class="session-dots">${dots}<span style="font-size:0.72rem;color:var(--muted);margin-left:4px">${doneCount}/${ex.timesPerDay} sessions</span></div>
       </div>
       <div class="arrow">&#8250;</div>
     `;
@@ -898,7 +933,7 @@ function renderBottomNav() {
   bottomNav.innerHTML = `
     <button class="btn btn-secondary" onclick="goHome()">Home</button>
     ${state.currentIdx > 0 ? `<button class="btn btn-secondary" onclick="startExercise(${state.currentIdx - 1})">Prev</button>` : ''}
-    <button class="btn btn-success" onclick="completeExercise()">Done</button>
+    <button class="btn btn-success" onclick="completeExercise()">Done Session</button>
     ${state.currentIdx < TOTAL_EXERCISES - 1 ? `<button class="btn btn-orange" onclick="startExercise(${state.currentIdx + 1})">Next</button>` : ''}
   `;
 }
@@ -995,10 +1030,22 @@ function renderExercise() {
   const timeStr = formatTime(state.timerValue);
   const isWarning = state.timerRunning && state.timerValue <= 3 && state.timerValue > 0;
 
+  const sessionsDone = getTimesCompleted(state.currentIdx);
+  const sessionDots = Array.from({ length: ex.timesPerDay }, (_, d) => {
+    let cls = 'session-dot';
+    if (d < sessionsDone) cls += ' done';
+    else if (d === sessionsDone) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
   card.innerHTML = `
     <div class="badge">Exercise ${ex.id} of ${TOTAL_EXERCISES}</div>
     <h2>${ex.name}</h2>
     <div class="type-badge">${ex.type}</div>
+    <div class="session-banner">
+      <span class="session-label">Session ${sessionsDone + 1} of ${ex.timesPerDay} today</span>
+      <div class="session-dots">${sessionDots}</div>
+    </div>
     <p class="purpose">${ex.purpose}</p>
     <div class="meta-row">
       <div class="meta-box"><div class="label">Reps</div><div class="value">${ex.reps}</div></div>
@@ -1029,7 +1076,7 @@ function renderExercise() {
     <div class="nav-row">
       <button class="btn btn-secondary" onclick="goHome()">&#8592; Home</button>
       ${state.currentIdx > 0 ? `<button class="btn btn-secondary" onclick="startExercise(${state.currentIdx - 1})">&#8592; Prev</button>` : ''}
-      <button class="btn btn-success" onclick="completeExercise()">Done &#10003;</button>
+      <button class="btn btn-success" onclick="completeExercise()">Done Session</button>
       ${state.currentIdx < TOTAL_EXERCISES - 1 ? `<button class="btn btn-orange" onclick="startExercise(${state.currentIdx + 1})">Next &#8594;</button>` : ''}
     </div>
   `;
