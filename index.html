@@ -906,6 +906,7 @@ function renderBottomNav() {
 function goHome() {
   clearTimer();
   state.sequential = false;
+  history.pushState(null, '', '#');
   showView('home');
   renderHome();
 }
@@ -916,7 +917,7 @@ function startAll() {
   startExercise(0);
 }
 
-function startExercise(idx) {
+function startExercise(idx, pushHistory = true) {
   clearTimer();
   state.currentIdx = idx;
   state.currentSet = 0;
@@ -927,10 +928,28 @@ function startExercise(idx) {
   state.stepHighlight = -1;
   state.waiting = true;
   state.restingBetweenSets = false;
+  if (pushHistory) history.pushState({ exercise: idx }, '', `#exercise/${idx + 1}`);
   showView('exercise');
   renderExercise();
   renderBottomNav();
 }
+
+// Handle browser back/forward
+window.addEventListener('popstate', () => {
+  const hash = location.hash;
+  const match = hash.match(/^#exercise\/(\d+)$/);
+  if (match) {
+    const idx = parseInt(match[1], 10) - 1;
+    if (idx >= 0 && idx < TOTAL_EXERCISES) {
+      startExercise(idx, false);
+    }
+  } else {
+    clearTimer();
+    state.sequential = false;
+    showView('home');
+    renderHome();
+  }
+});
 
 function beginExercise() {
   state.waiting = false;
@@ -1231,6 +1250,13 @@ function completeExercise() {
 
 // Initial render
 initFromData();
+
+// Route on load (handle deep links / page refresh on an exercise URL)
+const _initMatch = location.hash.match(/^#exercise\/(\d+)$/);
+if (_initMatch) {
+  const _idx = parseInt(_initMatch[1], 10) - 1;
+  if (_idx >= 0 && _idx < TOTAL_EXERCISES) startExercise(_idx, false);
+}
 </script>
 </body>
 </html>
