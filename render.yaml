@@ -7,8 +7,10 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: DB_PATH
-        value: data.db
+      - key: DATABASE_URL
+        fromDatabase:
+          name: neck-exercises-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
 
@@ -17,3 +19,7 @@ services:
     runtime: static
     staticPublishPath: .
     buildCommand: ""
+
+databases:
+  - name: neck-exercises-db
+    plan: free

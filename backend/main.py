@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
-import sqlite3
+import psycopg2
+import psycopg2.extras
 import os
 import bcrypt
 import jwt
@@ -22,37 +23,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DB_PATH = os.environ.get("DB_PATH", "data.db")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 def get_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 
 def init_db():
     conn = get_db()
-    conn.execute("""
+    cur = conn.cursor()
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             email TEXT UNIQUE NOT NULL,
             name TEXT NOT NULL,
             password_hash TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
-    conn.execute("""
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS completions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id),
             exercise_id INTEGER NOT NULL,
             exercise_name TEXT NOT NULL,
-            completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
     conn.commit()
+    cur.close()
     conn.close()
 
 
@@ -105,16 +106,20 @@ class LogRequest(BaseModel):
 def register(body: RegisterRequest):
     password_hash = bcrypt.hashpw(body.password.encode(), bcrypt.gensalt()).decode()
     conn = get_db()
+    cur = conn.cursor()
     try:
-        cursor = conn.execute(
-            "INSERT INTO users (email, name, password_hash) VALUES (?, ?, ?)",
+        cur.execute(
+            "INSERT INTO users (email, name, password_hash) VALUES (%s, %s, %s) RETURNING id",
             (body.email.lower().strip(), body.name.strip(), password_hash),
         )
-        user_id = cursor.lastrowid
+        user_id = cur.fetchone()[0]
         conn.commit()
-    except sqlite3.IntegrityError:
+    except psycopg2.errors.UniqueViolation:
+        conn.rollback()
+        cur.close()
         conn.close()
         raise HTTPException(status_code=400, detail="Email already registered")
+    cur.close()
     conn.close()
     token = create_token(user_id, body.email.lower().strip(), body.name.strip())
     return {
@@ -126,9 +131,10 @@ def register(body: RegisterRequest):
 @app.post("/api/login")
 def login(body: LoginRequest):
     conn = get_db()
-    user = conn.execute(
-        "SELECT * FROM users WHERE email = ?", (body.email.lower().strip(),)
-    ).fetchone()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("SELECT * FROM users WHERE email = %s", (body.email.lower().strip(),))
+    user = cur.fetchone()
+    cur.close()
     conn.close()
     if not user or not bcrypt.checkpw(body.password.encode(), user["password_hash"].encode()):
         raise HTTPException(status_code=401, detail="Invalid email or password")
@@ -142,11 +148,13 @@ def login(body: LoginRequest):
 @app.post("/api/log")
 def log_completion(body: LogRequest, user=Depends(get_current_user)):
     conn = get_db()
-    conn.execute(
-        "INSERT INTO completions (user_id, exercise_id, exercise_name) VALUES (?, ?, ?)",
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO completions (user_id, exercise_id, exercise_name) VALUES (%s, %s, %s)",
         (user["id"], body.exercise_id, body.exercise_name),
     )
     conn.commit()
+    cur.close()
     conn.close()
     return {"status": "ok"}
 
@@ -154,23 +162,27 @@ def log_completion(body: LogRequest, user=Depends(get_current_user)):
 @app.get("/api/stats")
 def get_stats(user=Depends(get_current_user)):
     conn = get_db()
-    rows = conn.execute(
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
         """
         SELECT exercise_id, exercise_name, COUNT(*) as total
-        FROM completions WHERE user_id = ?
+        FROM completions WHERE user_id = %s
         GROUP BY exercise_id, exercise_name
         """,
         (user["id"],),
-    ).fetchall()
-    today_rows = conn.execute(
+    )
+    rows = cur.fetchall()
+    cur.execute(
         """
         SELECT exercise_id, COUNT(*) as count
         FROM completions
-        WHERE user_id = ? AND DATE(completed_at) = DATE('now')
+        WHERE user_id = %s AND completed_at::date = CURRENT_DATE
         GROUP BY exercise_id
         """,
         (user["id"],),
-    ).fetchall()
+    )
+    today_rows = cur.fetchall()
+    cur.close()
     conn.close()
     today_map = {r["exercise_id"]: r["count"] for r in today_rows}
     stats = [
