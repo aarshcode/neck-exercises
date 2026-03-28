@@ -662,6 +662,75 @@
     .btn { font-size: 0.85rem; }
     .exercise-list li .info h3 { font-size: 0.85rem; }
   }
+
+  /* Auth */
+  header { position: relative; }
+  .auth-btn {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    margin-top: calc(env(safe-area-inset-top, 0px) / 2);
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .auth-btn:hover { background: rgba(255,255,255,0.3); }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: 340px;
+    max-width: 90vw;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .modal h2 { font-size: 1.3rem; margin-bottom: 18px; color: var(--text); }
+  .modal-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+  .modal-tab {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+  .modal-tab.active { color: var(--teal); border-bottom-color: var(--teal); font-weight: 600; }
+  .modal input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .modal input:focus { outline: none; border-color: var(--teal); }
+  .modal .btn-primary {
+    width: 100%;
+    padding: 11px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    margin-top: 4px;
+  }
+  .modal-error { color: #e74c3c; font-size: 0.85rem; margin-bottom: 10px; min-height: 18px; }
+  .user-name { font-size: 0.82rem; opacity: 0.9; }
 </style>
 </head>
 <body>
@@ -669,7 +738,31 @@
 <header>
   <h1>Cervicogenic Headache Exercises</h1>
   <p>Cervicogenic Headache Exercise Protocol</p>
+  <button class="auth-btn" id="authBtn" onclick="openAuthModal()">Log in</button>
 </header>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-tabs">
+      <div class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Log in</div>
+      <div class="modal-tab" id="tabRegister" onclick="switchTab('register')">Sign up</div>
+    </div>
+    <div id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+      <div class="modal-error" id="loginError"></div>
+      <button class="btn btn-primary" onclick="submitLogin()">Log in</button>
+    </div>
+    <div id="registerForm" style="display:none">
+      <input type="text" id="regName" placeholder="Name" autocomplete="name">
+      <input type="email" id="regEmail" placeholder="Email" autocomplete="email">
+      <input type="password" id="regPassword" placeholder="Password" autocomplete="new-password">
+      <div class="modal-error" id="registerError"></div>
+      <button class="btn btn-primary" onclick="submitRegister()">Create account</button>
+    </div>
+  </div>
+</div>
 
 <div class="disclaimer">
   <strong>Important:</strong> Compiled from physiotherapy literature and clinical protocols. Consult a physiotherapist before starting. Stop any exercise that worsens headache or causes sharp/radiating pain.
@@ -787,29 +880,120 @@ function renderSources(sources) {
   container.innerHTML = makeCollapsible('Sources', body);
 }
 
-// --- Backend API ---
-const BACKEND_URL = 'https://neck-exercises-api.onrender.com'; // update after deploying
+// --- Backend API & Auth ---
+const BACKEND_URL = 'https://neck-exercises-api.onrender.com';
 
-function getUserId() {
-  let id = localStorage.getItem('neck-exercises-user-id');
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem('neck-exercises-user-id', id);
+let authToken = localStorage.getItem('neck-exercises-token') || null;
+let authUser = JSON.parse(localStorage.getItem('neck-exercises-user') || 'null');
+
+function saveAuth(token, user) {
+  authToken = token;
+  authUser = user;
+  localStorage.setItem('neck-exercises-token', token);
+  localStorage.setItem('neck-exercises-user', JSON.stringify(user));
+}
+
+function clearAuth() {
+  authToken = null;
+  authUser = null;
+  localStorage.removeItem('neck-exercises-token');
+  localStorage.removeItem('neck-exercises-user');
+}
+
+function updateAuthBtn() {
+  const btn = document.getElementById('authBtn');
+  if (authUser) {
+    btn.innerHTML = `<span class="user-name">${authUser.name}</span>`;
+    btn.onclick = logout;
+  } else {
+    btn.textContent = 'Log in';
+    btn.onclick = openAuthModal;
   }
-  return id;
+}
+
+function openAuthModal() {
+  document.getElementById('authModal').classList.add('open');
+  switchTab('login');
+}
+
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('open');
+}
+
+function switchTab(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? '' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('registerError').textContent = '';
+}
+
+document.getElementById('authModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAuthModal();
+});
+
+async function submitLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.detail || 'Login failed'; return; }
+    saveAuth(data.token, data.user);
+    closeAuthModal();
+    updateAuthBtn();
+  } catch {
+    errEl.textContent = 'Network error. Try again.';
+  }
+}
+
+async function submitRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const errEl = document.getElementById('registerError');
+  errEl.textContent = '';
+  if (!name) { errEl.textContent = 'Name is required'; return; }
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.detail || 'Registration failed'; return; }
+    saveAuth(data.token, data.user);
+    closeAuthModal();
+    updateAuthBtn();
+  } catch {
+    errEl.textContent = 'Network error. Try again.';
+  }
+}
+
+function logout() {
+  if (!confirm(`Log out as ${authUser.name}?`)) return;
+  clearAuth();
+  updateAuthBtn();
 }
 
 function logCompletionToServer(idx) {
+  if (!authToken) return;
   const ex = exercises[idx];
   fetch(`${BACKEND_URL}/api/log`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      user_id: getUserId(),
-      exercise_id: ex.id,
-      exercise_name: ex.name,
-    }),
-  }).catch(() => {}); // silently fail — localStorage is the source of truth
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({ exercise_id: ex.id, exercise_name: ex.name }),
+  }).catch(() => {});
 }
 
 // --- localStorage daily tracking ---
@@ -1323,6 +1507,7 @@ function completeExercise() {
 
 // Initial render
 initFromData();
+updateAuthBtn();
 
 // Route on load (handle deep links / page refresh on an exercise URL)
 const _initMatch = location.hash.match(/^#exercise\/(\d+)$/);
