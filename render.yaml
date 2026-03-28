@@ -13,6 +13,5 @@ services:
   - type: web
     name: neck-exercises-frontend
     runtime: static
-    plan: free
     staticPublishPath: .
     buildCommand: ""
