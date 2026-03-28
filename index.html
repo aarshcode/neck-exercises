@@ -949,6 +949,7 @@ async function submitLogin() {
     saveAuth(data.token, data.user);
     closeAuthModal();
     updateAuthBtn();
+    syncFromServer();
   } catch {
     errEl.textContent = 'Network error. Try again.';
   }
@@ -972,6 +973,7 @@ async function submitRegister() {
     saveAuth(data.token, data.user);
     closeAuthModal();
     updateAuthBtn();
+    syncFromServer();
   } catch {
     errEl.textContent = 'Network error. Try again.';
   }
@@ -994,6 +996,30 @@ function logCompletionToServer(idx) {
     },
     body: JSON.stringify({ exercise_id: ex.id, exercise_name: ex.name }),
   }).catch(() => {});
+}
+
+async function syncFromServer() {
+  if (!authToken) return;
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/stats`, {
+      headers: { 'Authorization': `Bearer ${authToken}` },
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    // Map exercise_id -> today's count from server
+    const todayMap = {};
+    for (const stat of data.stats) {
+      todayMap[stat.exercise_id] = stat.today;
+    }
+    // Overwrite local daily data with server's today counts
+    const localData = { date: getTodayKey(), counts: {} };
+    exercises.forEach((ex, idx) => {
+      if (todayMap[ex.id]) localData.counts[idx] = todayMap[ex.id];
+    });
+    saveDailyData(localData);
+    renderProgressBar();
+    renderHome();
+  } catch {}
 }
 
 // --- localStorage daily tracking ---
@@ -1508,6 +1534,7 @@ function completeExercise() {
 // Initial render
 initFromData();
 updateAuthBtn();
+syncFromServer();
 
 // Route on load (handle deep links / page refresh on an exercise URL)
 const _initMatch = location.hash.match(/^#exercise\/(\d+)$/);
