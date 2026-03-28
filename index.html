@@ -787,6 +787,31 @@ function renderSources(sources) {
   container.innerHTML = makeCollapsible('Sources', body);
 }
 
+// --- Backend API ---
+const BACKEND_URL = 'https://neck-exercises-api.onrender.com'; // update after deploying
+
+function getUserId() {
+  let id = localStorage.getItem('neck-exercises-user-id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('neck-exercises-user-id', id);
+  }
+  return id;
+}
+
+function logCompletionToServer(idx) {
+  const ex = exercises[idx];
+  fetch(`${BACKEND_URL}/api/log`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      user_id: getUserId(),
+      exercise_id: ex.id,
+      exercise_name: ex.name,
+    }),
+  }).catch(() => {}); // silently fail — localStorage is the source of truth
+}
+
 // --- localStorage daily tracking ---
 function getTodayKey() {
   return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
@@ -815,6 +840,7 @@ function recordCompletion(idx) {
   const data = getDailyData();
   data.counts[idx] = (data.counts[idx] || 0) + 1;
   saveDailyData(data);
+  logCompletionToServer(idx);
 }
 
 function isFullyDoneToday(idx) {
