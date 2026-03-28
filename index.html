@@ -665,6 +665,7 @@
 
   /* Auth */
   header { position: relative; }
+  header h1, header p { padding-right: 90px; }
   .auth-btn {
     position: absolute;
     top: 50%;
@@ -679,6 +680,9 @@
     font-size: 0.82rem;
     cursor: pointer;
     white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .auth-btn:hover { background: rgba(255,255,255,0.3); }
   .modal-overlay {
@@ -699,7 +703,6 @@
     max-width: 90vw;
     box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   }
-  .modal h2 { font-size: 1.3rem; margin-bottom: 18px; color: var(--text); }
   .modal-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
   .modal-tab {
     flex: 1;
@@ -717,20 +720,36 @@
     padding: 10px 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 0.95rem;
+    font-size: 16px; /* prevents iOS zoom */
     margin-bottom: 12px;
     box-sizing: border-box;
   }
   .modal input:focus { outline: none; border-color: var(--teal); }
   .modal .btn-primary {
     width: 100%;
-    padding: 11px;
-    font-size: 0.95rem;
+    padding: 13px;
+    font-size: 1rem;
     border-radius: 8px;
     margin-top: 4px;
+    min-height: 48px;
   }
   .modal-error { color: #e74c3c; font-size: 0.85rem; margin-bottom: 10px; min-height: 18px; }
   .user-name { font-size: 0.82rem; opacity: 0.9; }
+
+  @media (max-width: 600px) {
+    .modal-overlay {
+      align-items: flex-end;
+      justify-content: stretch;
+    }
+    .modal {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+    }
+    header h1, header p { padding-right: 80px; }
+    .auth-btn { max-width: 80px; font-size: 0.78rem; padding: 5px 10px; }
+  }
 </style>
 </head>
 <body>
